@@ -1,0 +1,345 @@
+/* === CV Preview === */
+.cv-preview {
+    position: sticky;
+    top: 76px;
+    max-height: calc(100vh - 76px - 56px);
+    overflow-y: auto;
+    padding: 24px 16px 24px 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.cv-preview::-webkit-scrollbar {
+    width: 5px;
+}
+
+.cv-preview::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+/* A4-like page */
+.cv-preview__page {
+    background: #ffffff;
+    color: #1a1a2e;
+    border-radius: 6px;
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.08),
+        0 8px 30px rgba(0, 0, 0, 0.06);
+    padding: 40px 36px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 11px;
+    line-height: 1.55;
+    min-height: 500px;
+    /* Force light print-style regardless of app theme */
+}
+
+.cv-preview__page a {
+    color: #3366cc;
+    text-decoration: none;
+}
+
+.cv-preview__page a:hover {
+    text-decoration: underline;
+}
+
+/* Empty state */
+.cv-preview__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    color: #9ca3af;
+    text-align: center;
+    font-size: 13px;
+}
+
+.cv-preview__empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* Header */
+.cv-preview__header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #1a1a2e;
+}
+
+.cv-preview__name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+    color: #1a1a2e;
+    line-height: 1.2;
+}
+
+.cv-preview__title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #4b5563;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cv-preview__contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+    font-size: 10px;
+    color: #6b7280;
+}
+
+.cv-preview__contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+}
+
+.cv-preview__contact-icon {
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+/* Sections */
+.cv-preview__section {
+    margin-bottom: 16px;
+}
+
+.cv-preview__section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+}
+
+.cv-preview__divider {
+    height: 1px;
+    background: #d1d5db;
+    margin-bottom: 10px;
+}
+
+/* Summary */
+.cv-preview__summary {
+    font-size: 11px;
+    color: #374151;
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+/* Entries (Experience, Education, Certs) */
+.cv-preview__entry {
+    margin-bottom: 12px;
+}
+
+.cv-preview__entry:last-child {
+    margin-bottom: 0;
+}
+
+.cv-preview__entry--compact {
+    margin-bottom: 6px;
+}
+
+.cv-preview__entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.cv-preview__entry-title {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.cv-preview__entry-title a {
+    font-weight: 600;
+}
+
+.cv-preview__entry-org {
+    font-size: 11px;
+    color: #4b5563;
+    font-weight: 400;
+}
+
+.cv-preview__entry-dates {
+    font-size: 10px;
+    color: #6b7280;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 1px;
+}
+
+.cv-preview__entry-location {
+    font-size: 10px;
+    color: #6b7280;
+    margin-top: 1px;
+}
+
+.cv-preview__entry-desc {
+    font-size: 10.5px;
+    color: #4b5563;
+    margin-top: 3px;
+    line-height: 1.5;
+}
+
+/* Bullet points */
+.cv-preview__bullets {
+    margin: 4px 0 0 16px;
+    padding: 0;
+    list-style: disc;
+}
+
+.cv-preview__bullets li {
+    font-size: 10.5px;
+    color: #374151;
+    margin-bottom: 2px;
+    line-height: 1.5;
+}
+
+/* Skills */
+.cv-preview__skill-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 5px;
+    margin-bottom: 6px;
+}
+
+.cv-preview__skill-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #374151;
+    margin-right: 2px;
+}
+
+.cv-preview__skill-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.cv-preview__chip {
+    display: inline-block;
+    padding: 1px 8px;
+    background: #f3f4f6;
+    color: #374151;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    border: 1px solid #e5e7eb;
+}
+
+/* Languages */
+.cv-preview__lang-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+.cv-preview__lang-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cv-preview__lang-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.cv-preview__lang-level {
+    font-size: 10px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* === Editor Layout (split pane) === */
+.editor-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 60px - 56px);
+}
+
+.editor-layout__form {
+    padding: 32px 24px;
+    max-width: 700px;
+}
+
+.editor-layout__preview {
+    border-left: 1px solid var(--border);
+    background: var(--bg-tertiary);
+}
+
+/* Preview toggle button */
+.preview-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font);
+    font-size: 0.8rem;
+    transition: all var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.preview-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.preview-toggle--active {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .editor-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-layout__preview {
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+
+    .editor-layout__preview--hidden {
+        display: none;
+    }
+
+    .cv-preview {
+        position: static;
+        max-height: none;
+        padding: 24px 16px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .editor-layout__preview--hidden {
+        display: block;
+    }
+
+    .preview-toggle {
+        display: none;
+    }
+}

@@ -4,13 +4,13 @@ A self-hosted CV builder. Create, manage, and export professional CVs from a cle
 
 ## Features
 
-- 📝 **Structured CV editing** — Fill in sections like LinkedIn (Personal info, Summary, Experience, Education, Skills, Languages, Certifications)
-- 📄 **Multiple CVs** — Create and manage several CVs
-- 📸 **Version control** — Git-style snapshots with history and restore
-- 📤 **Export** — PDF (clean one-column) and DOCX (editable in Google Docs/Word)
-- 💾 **JSON backup** — Import/export your data
-- 🌙 **Dark mode** — Light/dark theme with system preference detection
-- 🔒 **Self-hosted** — Your data stays on your machine
+- **Structured CV editing** — Fill in sections like LinkedIn (Personal info, Summary, Experience, Education, Skills, Languages, Certifications)
+- **Multiple CVs** — Create and manage several CVs
+- **Version control** — Git-style snapshots with history and restore
+- **Export** — PDF (clean one-column) and DOCX (editable in Google Docs/Word)
+- **JSON backup** — Import/export your data
+- **Dark mode** — Light/dark theme with system preference detection
+- **Self-hosted** — Your data stays on your machine
 
 ## Quick Start
 

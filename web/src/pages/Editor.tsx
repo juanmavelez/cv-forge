@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import { useToast } from '../components/Toast';
 import { useModal } from '../components/Modal';
+import { CVPreview } from '../components/CVPreview';
 import type { CVData, Experience, Education, SkillGroup, Language, Certification } from '../types';
 
 // Debounce timer ref
@@ -19,6 +20,7 @@ export function Editor() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [showExport, setShowExport] = useState(false);
+    const [showPreview, setShowPreview] = useState(true);
 
     // Track which sections are open
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -87,143 +89,151 @@ export function Editor() {
 
     return (
         <>
-            <div className="container">
-                {/* Title input */}
-                <div className="form-group">
-                    <input
-                        className="form-input"
-                        style={{ fontSize: '1.5rem', fontWeight: 700, border: 'none', padding: '8px 0', background: 'transparent' }}
-                        value={title}
-                        onChange={e => updateTitle(e.target.value)}
-                        placeholder="CV Title"
-                    />
+            <div className="editor-layout">
+                {/* Left: Form editor */}
+                <div className="editor-layout__form">
+                    {/* Title input */}
+                    <div className="form-group">
+                        <input
+                            className="form-input"
+                            style={{ fontSize: '1.5rem', fontWeight: 700, border: 'none', padding: '8px 0', background: 'transparent' }}
+                            value={title}
+                            onChange={e => updateTitle(e.target.value)}
+                            placeholder="CV Title"
+                        />
+                    </div>
+
+                    {/* Personal */}
+                    <SectionCard
+                        title="Personal Information"
+                        icon="👤"
+                        isOpen={!!openSections.personal}
+                        onToggle={() => toggleSection('personal')}
+                    >
+                        <div className="form-row">
+                            <FormInput label="First Name" value={p.firstName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, firstName: v } }))} />
+                            <FormInput label="Last Name" value={p.lastName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, lastName: v } }))} />
+                        </div>
+                        <FormInput label="Professional Title" value={p.title} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, title: v } }))} placeholder="e.g. Frontend Engineer" />
+                        <div className="form-row">
+                            <FormInput label="Email" value={p.email} type="email" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, email: v } }))} />
+                            <FormInput label="Phone" value={p.phone} type="tel" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, phone: v } }))} />
+                        </div>
+                        <FormInput label="Location" value={p.location} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, location: v } }))} />
+                        <div className="form-row">
+                            <FormInput label="LinkedIn" value={p.linkedin} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, linkedin: v } }))} />
+                            <FormInput label="Website" value={p.website} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, website: v } }))} />
+                        </div>
+                    </SectionCard>
+
+                    {/* Summary */}
+                    <SectionCard title="Summary" icon="📝" isOpen={!!openSections.summary} onToggle={() => toggleSection('summary')}>
+                        <div className="form-group">
+                            <textarea
+                                className="form-textarea"
+                                value={data.summary}
+                                onChange={e => updateData(d => ({ ...d, summary: e.target.value }))}
+                                rows={4}
+                                placeholder="Brief professional summary…"
+                            />
+                        </div>
+                    </SectionCard>
+
+                    {/* Experience */}
+                    <SectionCard title="Experience" icon="💼" isOpen={!!openSections.experience} onToggle={() => toggleSection('experience')}>
+                        {data.experience.map((exp, i) => (
+                            <ExperienceEntry key={i} index={i} entry={exp}
+                                onChange={entry => updateData(d => {
+                                    const experience = [...d.experience];
+                                    experience[i] = entry;
+                                    return { ...d, experience };
+                                })}
+                                onRemove={() => updateData(d => ({ ...d, experience: d.experience.filter((_, j) => j !== i) }))}
+                            />
+                        ))}
+                        <button className="add-entry-btn" onClick={() => updateData(d => ({
+                            ...d,
+                            experience: [...d.experience, { company: '', title: '', location: '', startDate: '', endDate: '', current: false, description: '' }],
+                        }))}>+ Add Experience</button>
+                    </SectionCard>
+
+                    {/* Education */}
+                    <SectionCard title="Education" icon="🎓" isOpen={!!openSections.education} onToggle={() => toggleSection('education')}>
+                        {data.education.map((edu, i) => (
+                            <EducationEntry key={i} index={i} entry={edu}
+                                onChange={entry => updateData(d => {
+                                    const education = [...d.education];
+                                    education[i] = entry;
+                                    return { ...d, education };
+                                })}
+                                onRemove={() => updateData(d => ({ ...d, education: d.education.filter((_, j) => j !== i) }))}
+                            />
+                        ))}
+                        <button className="add-entry-btn" onClick={() => updateData(d => ({
+                            ...d,
+                            education: [...d.education, { institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' }],
+                        }))}>+ Add Education</button>
+                    </SectionCard>
+
+                    {/* Skills */}
+                    <SectionCard title="Skills" icon="🛠" isOpen={!!openSections.skills} onToggle={() => toggleSection('skills')}>
+                        {data.skills.map((sg, i) => (
+                            <SkillGroupEntry key={i} index={i} entry={sg}
+                                onChange={entry => updateData(d => {
+                                    const skills = [...d.skills];
+                                    skills[i] = entry;
+                                    return { ...d, skills };
+                                })}
+                                onRemove={() => updateData(d => ({ ...d, skills: d.skills.filter((_, j) => j !== i) }))}
+                            />
+                        ))}
+                        <button className="add-entry-btn" onClick={() => updateData(d => ({
+                            ...d,
+                            skills: [...d.skills, { category: '', items: [] }],
+                        }))}>+ Add Skill Group</button>
+                    </SectionCard>
+
+                    {/* Languages */}
+                    <SectionCard title="Languages" icon="🌐" isOpen={!!openSections.languages} onToggle={() => toggleSection('languages')}>
+                        {data.languages.map((lang, i) => (
+                            <LanguageEntry key={i} index={i} entry={lang}
+                                onChange={entry => updateData(d => {
+                                    const languages = [...d.languages];
+                                    languages[i] = entry;
+                                    return { ...d, languages };
+                                })}
+                                onRemove={() => updateData(d => ({ ...d, languages: d.languages.filter((_, j) => j !== i) }))}
+                            />
+                        ))}
+                        <button className="add-entry-btn" onClick={() => updateData(d => ({
+                            ...d,
+                            languages: [...d.languages, { language: '', proficiency: '' }],
+                        }))}>+ Add Language</button>
+                    </SectionCard>
+
+                    {/* Certifications */}
+                    <SectionCard title="Certifications" icon="🏅" isOpen={!!openSections.certifications} onToggle={() => toggleSection('certifications')}>
+                        {data.certifications.map((cert, i) => (
+                            <CertificationEntry key={i} index={i} entry={cert}
+                                onChange={entry => updateData(d => {
+                                    const certifications = [...d.certifications];
+                                    certifications[i] = entry;
+                                    return { ...d, certifications };
+                                })}
+                                onRemove={() => updateData(d => ({ ...d, certifications: d.certifications.filter((_, j) => j !== i) }))}
+                            />
+                        ))}
+                        <button className="add-entry-btn" onClick={() => updateData(d => ({
+                            ...d,
+                            certifications: [...d.certifications, { name: '', issuer: '', date: '', url: '' }],
+                        }))}>+ Add Certification</button>
+                    </SectionCard>
                 </div>
 
-                {/* Personal */}
-                <SectionCard
-                    title="Personal Information"
-                    icon="👤"
-                    isOpen={!!openSections.personal}
-                    onToggle={() => toggleSection('personal')}
-                >
-                    <div className="form-row">
-                        <FormInput label="First Name" value={p.firstName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, firstName: v } }))} />
-                        <FormInput label="Last Name" value={p.lastName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, lastName: v } }))} />
-                    </div>
-                    <FormInput label="Professional Title" value={p.title} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, title: v } }))} placeholder="e.g. Frontend Engineer" />
-                    <div className="form-row">
-                        <FormInput label="Email" value={p.email} type="email" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, email: v } }))} />
-                        <FormInput label="Phone" value={p.phone} type="tel" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, phone: v } }))} />
-                    </div>
-                    <FormInput label="Location" value={p.location} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, location: v } }))} />
-                    <div className="form-row">
-                        <FormInput label="LinkedIn" value={p.linkedin} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, linkedin: v } }))} />
-                        <FormInput label="Website" value={p.website} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, website: v } }))} />
-                    </div>
-                </SectionCard>
-
-                {/* Summary */}
-                <SectionCard title="Summary" icon="📝" isOpen={!!openSections.summary} onToggle={() => toggleSection('summary')}>
-                    <div className="form-group">
-                        <textarea
-                            className="form-textarea"
-                            value={data.summary}
-                            onChange={e => updateData(d => ({ ...d, summary: e.target.value }))}
-                            rows={4}
-                            placeholder="Brief professional summary…"
-                        />
-                    </div>
-                </SectionCard>
-
-                {/* Experience */}
-                <SectionCard title="Experience" icon="💼" isOpen={!!openSections.experience} onToggle={() => toggleSection('experience')}>
-                    {data.experience.map((exp, i) => (
-                        <ExperienceEntry key={i} index={i} entry={exp}
-                            onChange={entry => updateData(d => {
-                                const experience = [...d.experience];
-                                experience[i] = entry;
-                                return { ...d, experience };
-                            })}
-                            onRemove={() => updateData(d => ({ ...d, experience: d.experience.filter((_, j) => j !== i) }))}
-                        />
-                    ))}
-                    <button className="add-entry-btn" onClick={() => updateData(d => ({
-                        ...d,
-                        experience: [...d.experience, { company: '', title: '', location: '', startDate: '', endDate: '', current: false, description: '' }],
-                    }))}>+ Add Experience</button>
-                </SectionCard>
-
-                {/* Education */}
-                <SectionCard title="Education" icon="🎓" isOpen={!!openSections.education} onToggle={() => toggleSection('education')}>
-                    {data.education.map((edu, i) => (
-                        <EducationEntry key={i} index={i} entry={edu}
-                            onChange={entry => updateData(d => {
-                                const education = [...d.education];
-                                education[i] = entry;
-                                return { ...d, education };
-                            })}
-                            onRemove={() => updateData(d => ({ ...d, education: d.education.filter((_, j) => j !== i) }))}
-                        />
-                    ))}
-                    <button className="add-entry-btn" onClick={() => updateData(d => ({
-                        ...d,
-                        education: [...d.education, { institution: '', degree: '', field: '', startDate: '', endDate: '', description: '' }],
-                    }))}>+ Add Education</button>
-                </SectionCard>
-
-                {/* Skills */}
-                <SectionCard title="Skills" icon="🛠" isOpen={!!openSections.skills} onToggle={() => toggleSection('skills')}>
-                    {data.skills.map((sg, i) => (
-                        <SkillGroupEntry key={i} index={i} entry={sg}
-                            onChange={entry => updateData(d => {
-                                const skills = [...d.skills];
-                                skills[i] = entry;
-                                return { ...d, skills };
-                            })}
-                            onRemove={() => updateData(d => ({ ...d, skills: d.skills.filter((_, j) => j !== i) }))}
-                        />
-                    ))}
-                    <button className="add-entry-btn" onClick={() => updateData(d => ({
-                        ...d,
-                        skills: [...d.skills, { category: '', items: [] }],
-                    }))}>+ Add Skill Group</button>
-                </SectionCard>
-
-                {/* Languages */}
-                <SectionCard title="Languages" icon="🌐" isOpen={!!openSections.languages} onToggle={() => toggleSection('languages')}>
-                    {data.languages.map((lang, i) => (
-                        <LanguageEntry key={i} index={i} entry={lang}
-                            onChange={entry => updateData(d => {
-                                const languages = [...d.languages];
-                                languages[i] = entry;
-                                return { ...d, languages };
-                            })}
-                            onRemove={() => updateData(d => ({ ...d, languages: d.languages.filter((_, j) => j !== i) }))}
-                        />
-                    ))}
-                    <button className="add-entry-btn" onClick={() => updateData(d => ({
-                        ...d,
-                        languages: [...d.languages, { language: '', proficiency: '' }],
-                    }))}>+ Add Language</button>
-                </SectionCard>
-
-                {/* Certifications */}
-                <SectionCard title="Certifications" icon="🏅" isOpen={!!openSections.certifications} onToggle={() => toggleSection('certifications')}>
-                    {data.certifications.map((cert, i) => (
-                        <CertificationEntry key={i} index={i} entry={cert}
-                            onChange={entry => updateData(d => {
-                                const certifications = [...d.certifications];
-                                certifications[i] = entry;
-                                return { ...d, certifications };
-                            })}
-                            onRemove={() => updateData(d => ({ ...d, certifications: d.certifications.filter((_, j) => j !== i) }))}
-                        />
-                    ))}
-                    <button className="add-entry-btn" onClick={() => updateData(d => ({
-                        ...d,
-                        certifications: [...d.certifications, { name: '', issuer: '', date: '', url: '' }],
-                    }))}>+ Add Certification</button>
-                </SectionCard>
+                {/* Right: Live Preview */}
+                <div className={`editor-layout__preview${showPreview ? '' : ' editor-layout__preview--hidden'}`}>
+                    <CVPreview data={data} title={title} />
+                </div>
             </div>
 
             {/* Action bar */}
@@ -234,6 +244,12 @@ export function Editor() {
                     </span>
                 </div>
                 <div className="action-bar__right">
+                    <button
+                        className={`preview-toggle${showPreview ? ' preview-toggle--active' : ''}`}
+                        onClick={() => setShowPreview(v => !v)}
+                    >
+                        👁 Preview
+                    </button>
                     <button className="btn btn--secondary btn--sm" onClick={() => navigate(`/cv/${id}/history`)}>
                         🕐 History
                     </button>
