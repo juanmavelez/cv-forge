@@ -5,9 +5,29 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/cv-forge/cv-forge/internal/export/fonts"
 	"github.com/cv-forge/cv-forge/internal/models"
 	"github.com/go-pdf/fpdf"
 )
+
+const fontFamily = "DejaVu"
+
+// registerUTF8Fonts loads the embedded DejaVu Sans TTF files so that the
+// PDF supports the full Unicode range (accented chars, bullets, dashes, etc).
+func registerUTF8Fonts(pdf *fpdf.Fpdf) {
+	for _, f := range []struct {
+		style string
+		file  string
+	}{
+		{"", "DejaVuSans.ttf"},
+		{"B", "DejaVuSans-Bold.ttf"},
+		{"I", "DejaVuSans-Oblique.ttf"},
+		{"BI", "DejaVuSans-BoldOblique.ttf"},
+	} {
+		data, _ := fonts.FS.ReadFile(f.file)
+		pdf.AddUTF8FontFromBytes(fontFamily, f.style, data)
+	}
+}
 
 // GeneratePDF creates a clean one-column PDF from CV data, styled to match
 // the reference CV layout: centered header, slate-blue section titles in
@@ -16,6 +36,9 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	pdf := fpdf.New("P", "mm", "A4", "")
 	pdf.SetMargins(25, 25, 25)
 	pdf.SetAutoPageBreak(true, 25)
+
+	registerUTF8Fonts(pdf)
+
 	pdf.AddPage()
 
 	d := cv.Data
@@ -23,7 +46,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	usableWidth := pageWidth - 50 // 25mm margins on each side
 
 	// --- Name ---
-	pdf.SetFont("Helvetica", "", 18)
+	pdf.SetFont(fontFamily, "", 18)
 	pdf.SetTextColor(20, 20, 20)
 	name := strings.TrimSpace(d.Personal.FirstName + " " + d.Personal.LastName)
 	if name == "" {
@@ -34,7 +57,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Professional Title ---
 	if d.Personal.Title != "" {
-		pdf.SetFont("Helvetica", "B", 14)
+		pdf.SetFont(fontFamily, "B", 14)
 		pdf.SetTextColor(20, 20, 20)
 		pdf.CellFormat(0, 8, d.Personal.Title, "", 1, "C", false, 0, "")
 		pdf.Ln(3)
@@ -58,7 +81,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 		contactParts = append(contactParts, d.Personal.Location)
 	}
 	if len(contactParts) > 0 {
-		pdf.SetFont("Helvetica", "", 10)
+		pdf.SetFont(fontFamily, "", 10)
 		pdf.SetTextColor(80, 80, 80)
 		pdf.CellFormat(0, 5, strings.Join(contactParts, "  |  "), "", 1, "C", false, 0, "")
 	}
@@ -67,7 +90,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	// --- Summary ---
 	if d.Summary != "" {
 		sectionHeading(pdf, "Summary")
-		pdf.SetFont("Helvetica", "", 10)
+		pdf.SetFont(fontFamily, "", 10)
 		pdf.SetTextColor(40, 40, 40)
 		pdf.MultiCell(0, 5, d.Summary, "", "L", false)
 		pdf.Ln(5)
@@ -95,14 +118,14 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			if exp.Location != "" {
 				header += " (" + exp.Location + ")"
 			}
-			pdf.SetFont("Helvetica", "B", 11)
+			pdf.SetFont(fontFamily, "B", 11)
 			pdf.SetTextColor(30, 30, 30)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
 			// Dates — italic
 			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current)
 			if dateStr != "" {
-				pdf.SetFont("Helvetica", "I", 10)
+				pdf.SetFont(fontFamily, "I", 10)
 				pdf.SetTextColor(80, 80, 80)
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
 			}
@@ -133,20 +156,20 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			if edu.Institution != "" {
 				header += " | " + edu.Institution
 			}
-			pdf.SetFont("Helvetica", "B", 11)
+			pdf.SetFont(fontFamily, "B", 11)
 			pdf.SetTextColor(30, 30, 30)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
 			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false)
 			if dateStr != "" {
-				pdf.SetFont("Helvetica", "I", 10)
+				pdf.SetFont(fontFamily, "I", 10)
 				pdf.SetTextColor(80, 80, 80)
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
 			}
 
 			if edu.Description != "" {
 				pdf.Ln(2)
-				pdf.SetFont("Helvetica", "", 10)
+				pdf.SetFont(fontFamily, "", 10)
 				pdf.SetTextColor(40, 40, 40)
 				pdf.MultiCell(0, 5, edu.Description, "", "L", false)
 			}
@@ -177,12 +200,12 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			if cert.Issuer != "" {
 				header += " | " + cert.Issuer
 			}
-			pdf.SetFont("Helvetica", "B", 10)
+			pdf.SetFont(fontFamily, "B", 10)
 			pdf.SetTextColor(30, 30, 30)
 			pdf.CellFormat(0, 5, header, "", 1, "L", false, 0, "")
 
 			if cert.Date != "" {
-				pdf.SetFont("Helvetica", "I", 10)
+				pdf.SetFont(fontFamily, "I", 10)
 				pdf.SetTextColor(80, 80, 80)
 				pdf.CellFormat(0, 5, cert.Date, "", 1, "L", false, 0, "")
 			}
@@ -199,16 +222,16 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 // sectionHeading renders a slate-blue Title Case heading with no underline.
 func sectionHeading(pdf *fpdf.Fpdf, title string) {
-	pdf.SetFont("Helvetica", "B", 13)
+	pdf.SetFont(fontFamily, "B", 13)
 	// Slate blue matching the target PDF
 	pdf.SetTextColor(78, 107, 138)
 	pdf.CellFormat(0, 7, title, "", 1, "L", false, 0, "")
 	pdf.Ln(2)
 }
 
-// bulletText renders a bullet-pointed line: "● text".
+// bulletText renders a bullet-pointed line: "• text".
 func bulletText(pdf *fpdf.Fpdf, text string, usableWidth float64) {
-	pdf.SetFont("Helvetica", "", 10)
+	pdf.SetFont(fontFamily, "", 10)
 	pdf.SetTextColor(40, 40, 40)
 	bullet := "    •   "
 	bulletW := pdf.GetStringWidth(bullet)
