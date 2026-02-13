@@ -1,0 +1,21 @@
+# Build artifacts
+cmd/server/dist/
+cv-forge
+
+# Go
+*.exe
+*.test
+*.out
+
+# Frontend
+web/node_modules/
+
+# SQLite
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# OS
+.DS_Store
+Thumbs.db
