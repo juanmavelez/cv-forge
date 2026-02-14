@@ -264,11 +264,37 @@ func formatDateRange(start, end string, current bool) string {
 	if start == "" && end == "" && !current {
 		return ""
 	}
-	result := start
-	if current {
-		result += " – Present"
-	} else if end != "" {
-		result += " – " + end
+
+	formatDate := func(s string) string {
+		if s == "" {
+			return ""
+		}
+		parts := strings.Split(s, "-")
+		if len(parts) != 2 {
+			return s
+		}
+		year := parts[0]
+		month := parts[1]
+		months := []string{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
+		m := 0
+		fmt.Sscanf(month, "%d", &m)
+		if m >= 1 && m <= 12 {
+			return months[m-1] + " " + year
+		}
+		return year
 	}
-	return result
+
+	sFormatted := formatDate(start)
+	if current {
+		return sFormatted + " – Present"
+	}
+
+	eFormatted := formatDate(end)
+	if sFormatted != "" && eFormatted != "" {
+		return sFormatted + " – " + eFormatted
+	}
+	if sFormatted != "" {
+		return sFormatted
+	}
+	return eFormatted
 }

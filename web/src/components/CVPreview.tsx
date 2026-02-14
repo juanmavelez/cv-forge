@@ -45,12 +45,12 @@ export function CVPreview({ data }: CVPreviewProps) {
                         <div className="cv-preview__contact">
                             {contactItems.map((item, i) => (
                                 <span key={i} className="cv-preview__contact-item">
-                                    <span className="cv-preview__contact-icon">{item.icon}</span>
                                     {item.href ? (
                                         <a href={item.href} target="_blank" rel="noreferrer">{item.text}</a>
                                     ) : (
                                         <span>{item.text}</span>
                                     )}
+                                    {i < contactItems.length - 1 && <span className="cv-preview__contact-divider"> | </span>}
                                 </span>
                             ))}
                         </div>
@@ -61,34 +61,48 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {data.summary && (
                     <section className="cv-preview__section">
                         <h2 className="cv-preview__section-title">Summary</h2>
-                        <div className="cv-preview__divider" />
                         <p className="cv-preview__summary">{data.summary}</p>
+                    </section>
+                )}
+
+                {/* Skills */}
+                {data.skills.length > 0 && (
+                    <section className="cv-preview__section">
+                        <h2 className="cv-preview__section-title">Skills</h2>
+                        {data.skills.map((sg, i) => (
+                            <div key={i} className="cv-preview__entry">
+                                <ul className="cv-preview__bullets">
+                                    <li>
+                                        {sg.category}: {sg.items.join(', ')}
+                                    </li>
+                                </ul>
+                            </div>
+                        ))}
                     </section>
                 )}
 
                 {/* Experience */}
                 {data.experience.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title">Experience</h2>
-                        <div className="cv-preview__divider" />
+                        <h2 className="cv-preview__section-title">Professional Experience</h2>
                         {data.experience.map((exp, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
-                                    <div>
-                                        <strong className="cv-preview__entry-title">{exp.title || 'Untitled Role'}</strong>
-                                        {exp.company && <span className="cv-preview__entry-org"> · {exp.company}</span>}
-                                    </div>
-                                    <span className="cv-preview__entry-dates">
-                                        {formatDate(exp.startDate)}
-                                        {(exp.startDate || exp.endDate || exp.current) && ' — '}
-                                        {exp.current ? 'Present' : formatDate(exp.endDate)}
-                                    </span>
+                                    <strong className="cv-preview__entry-title">
+                                        {exp.title || 'Untitled Role'}
+                                        {exp.company && ` | ${exp.company}`}
+                                        {exp.location && ` (${exp.location})`}
+                                    </strong>
                                 </div>
-                                {exp.location && <p className="cv-preview__entry-location">{exp.location}</p>}
+                                <div className="cv-preview__entry-dates">
+                                    {formatDate(exp.startDate)}
+                                    {(exp.startDate || exp.endDate || exp.current) && ' – '}
+                                    {exp.current ? 'Present' : formatDate(exp.endDate)}
+                                </div>
                                 {exp.description && (
                                     <ul className="cv-preview__bullets">
                                         {exp.description.split('\n').filter(Boolean).map((line, j) => (
-                                            <li key={j}>{line.replace(/^[\-•]\s*/, '')}</li>
+                                            <li key={j}>{line.replace(/^[\-•\s*·–—\-]/, '').trim()}</li>
                                         ))}
                                     </ul>
                                 )}
@@ -101,41 +115,20 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {data.education.length > 0 && (
                     <section className="cv-preview__section">
                         <h2 className="cv-preview__section-title">Education</h2>
-                        <div className="cv-preview__divider" />
                         {data.education.map((edu, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
-                                    <div>
-                                        <strong className="cv-preview__entry-title">
-                                            {[edu.degree, edu.field].filter(Boolean).join(' in ') || 'Untitled'}
-                                        </strong>
-                                        {edu.institution && <span className="cv-preview__entry-org"> · {edu.institution}</span>}
-                                    </div>
-                                    <span className="cv-preview__entry-dates">
-                                        {formatDate(edu.startDate)}
-                                        {(edu.startDate || edu.endDate) && ' — '}
-                                        {formatDate(edu.endDate)}
-                                    </span>
+                                    <strong className="cv-preview__entry-title">
+                                        {[edu.degree, edu.field].filter(Boolean).join(' in ') || 'Untitled'}
+                                        {edu.institution && ` | ${edu.institution}`}
+                                    </strong>
+                                </div>
+                                <div className="cv-preview__entry-dates">
+                                    {formatDate(edu.startDate)}
+                                    {(edu.startDate || edu.endDate) && ' – '}
+                                    {formatDate(edu.endDate)}
                                 </div>
                                 {edu.description && <p className="cv-preview__entry-desc">{edu.description}</p>}
-                            </div>
-                        ))}
-                    </section>
-                )}
-
-                {/* Skills */}
-                {data.skills.length > 0 && (
-                    <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title">Skills</h2>
-                        <div className="cv-preview__divider" />
-                        {data.skills.map((sg, i) => (
-                            <div key={i} className="cv-preview__skill-group">
-                                {sg.category && <span className="cv-preview__skill-label">{sg.category}:</span>}
-                                <div className="cv-preview__skill-chips">
-                                    {sg.items.map((skill, j) => (
-                                        <span key={j} className="cv-preview__chip">{skill}</span>
-                                    ))}
-                                </div>
                             </div>
                         ))}
                     </section>
@@ -145,17 +138,16 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {data.languages.length > 0 && (
                     <section className="cv-preview__section">
                         <h2 className="cv-preview__section-title">Languages</h2>
-                        <div className="cv-preview__divider" />
-                        <div className="cv-preview__lang-grid">
-                            {data.languages.map((lang, i) => (
-                                <div key={i} className="cv-preview__lang-item">
-                                    <span className="cv-preview__lang-name">{lang.language || 'Language'}</span>
-                                    {lang.proficiency && (
-                                        <span className="cv-preview__lang-level">{lang.proficiency}</span>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                        {data.languages.map((lang, i) => (
+                            <div key={i} className="cv-preview__entry">
+                                <ul className="cv-preview__bullets">
+                                    <li>
+                                        {lang.language}
+                                        {lang.proficiency && `: ${lang.proficiency}`}
+                                    </li>
+                                </ul>
+                            </div>
+                        ))}
                     </section>
                 )}
 
@@ -163,26 +155,23 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {data.certifications.length > 0 && (
                     <section className="cv-preview__section">
                         <h2 className="cv-preview__section-title">Certifications</h2>
-                        <div className="cv-preview__divider" />
                         {data.certifications.map((cert, i) => (
                             <div key={i} className="cv-preview__entry cv-preview__entry--compact">
                                 <div className="cv-preview__entry-header">
-                                    <div>
-                                        <strong className="cv-preview__entry-title">
-                                            {cert.url ? (
-                                                <a href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`} target="_blank" rel="noreferrer">
-                                                    {cert.name || 'Untitled'}
-                                                </a>
-                                            ) : (
-                                                cert.name || 'Untitled'
-                                            )}
-                                        </strong>
-                                        {cert.issuer && <span className="cv-preview__entry-org"> · {cert.issuer}</span>}
-                                    </div>
-                                    {cert.date && (
-                                        <span className="cv-preview__entry-dates">{formatDate(cert.date)}</span>
-                                    )}
+                                    <strong className="cv-preview__entry-title">
+                                        {cert.url ? (
+                                            <a href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`} target="_blank" rel="noreferrer">
+                                                {cert.name || 'Untitled'}
+                                            </a>
+                                        ) : (
+                                            cert.name || 'Untitled'
+                                        )}
+                                        {cert.issuer && ` | ${cert.issuer}`}
+                                    </strong>
                                 </div>
+                                {cert.date && (
+                                    <div className="cv-preview__entry-dates">{formatDate(cert.date)}</div>
+                                )}
                             </div>
                         ))}
                     </section>

@@ -64,81 +64,76 @@
 /* Header */
 .cv-preview__header {
     text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
-    border-bottom: 2px solid #1a1a2e;
+    margin-bottom: 6px;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
 .cv-preview__name {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    margin-bottom: 2px;
-    color: #1a1a2e;
+    font-size: 18pt;
+    font-weight: 500;
+    margin-bottom: 3pt;
+    color: rgb(20, 20, 20);
     line-height: 1.2;
 }
 
 .cv-preview__title {
-    font-size: 12px;
-    font-weight: 500;
-    color: #4b5563;
-    margin-bottom: 10px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 14pt;
+    font-weight: 700;
+    color: rgb(20, 20, 20);
+    margin-bottom: 3pt;
+    letter-spacing: normal;
+    text-transform: none;
 }
 
 .cv-preview__contact {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px 14px;
-    font-size: 10px;
-    color: #6b7280;
+    gap: 0 4px;
+    font-size: 10pt;
+    color: rgb(80, 80, 80);
 }
 
 .cv-preview__contact-item {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    gap: 0;
     white-space: nowrap;
 }
 
-.cv-preview__contact-icon {
-    font-size: 10px;
-    opacity: 0.7;
+.cv-preview__contact-divider {
+    margin: 0 4px;
+    color: rgb(80, 80, 80);
 }
 
 /* Sections */
 .cv-preview__section {
-    margin-bottom: 16px;
+    margin-top: 6mm;
+    margin-bottom: 0;
 }
 
 .cv-preview__section-title {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #1a1a2e;
-    margin-bottom: 4px;
-}
-
-.cv-preview__divider {
-    height: 1px;
-    background: #d1d5db;
-    margin-bottom: 10px;
+    font-size: 13pt;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    color: rgb(78, 107, 138);
+    /* Slate blue from PDF */
+    margin-bottom: 2mm;
 }
 
 /* Summary */
 .cv-preview__summary {
-    font-size: 11px;
-    color: #374151;
-    line-height: 1.6;
+    font-size: 10pt;
+    color: rgb(40, 40, 40);
+    line-height: 1.4;
     white-space: pre-line;
 }
 
 /* Entries (Experience, Education, Certs) */
 .cv-preview__entry {
-    margin-bottom: 12px;
+    margin-bottom: 3mm;
 }
 
 .cv-preview__entry:last-child {
@@ -146,111 +141,62 @@
 }
 
 .cv-preview__entry--compact {
-    margin-bottom: 6px;
+    margin-bottom: 2mm;
 }
 
 .cv-preview__entry-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px;
+    display: block;
+    margin-bottom: 0;
 }
 
 .cv-preview__entry-title {
-    font-size: 11.5px;
+    font-size: 11pt;
     font-weight: 600;
-    color: #1f2937;
-}
-
-.cv-preview__entry-title a {
-    font-weight: 600;
-}
-
-.cv-preview__entry-org {
-    font-size: 11px;
-    color: #4b5563;
-    font-weight: 400;
+    color: rgb(30, 30, 30);
 }
 
 .cv-preview__entry-dates {
-    font-size: 10px;
-    color: #6b7280;
-    white-space: nowrap;
-    flex-shrink: 0;
-    padding-top: 1px;
-}
-
-.cv-preview__entry-location {
-    font-size: 10px;
-    color: #6b7280;
-    margin-top: 1px;
+    font-size: 10pt;
+    color: rgb(80, 80, 80);
+    font-style: italic;
+    margin-bottom: 2pt;
 }
 
 .cv-preview__entry-desc {
-    font-size: 10.5px;
-    color: #4b5563;
-    margin-top: 3px;
-    line-height: 1.5;
+    font-size: 10pt;
+    color: rgb(40, 40, 40);
+    margin-top: 2mm;
+    line-height: 1.4;
 }
 
 /* Bullet points */
 .cv-preview__bullets {
-    margin: 4px 0 0 16px;
+    margin: 1mm 0 0 0;
     padding: 0;
-    list-style: disc;
+    list-style: none;
 }
 
 .cv-preview__bullets li {
-    font-size: 10.5px;
-    color: #374151;
-    margin-bottom: 2px;
-    line-height: 1.5;
+    font-size: 10pt;
+    color: rgb(40, 40, 40);
+    margin-bottom: 1mm;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 8mm;
 }
 
-/* Skills */
-.cv-preview__skill-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 5px;
-    margin-bottom: 6px;
+.cv-preview__bullets li::before {
+    content: "•";
+    position: absolute;
+    left: 4mm;
+    color: rgb(40, 40, 40);
 }
 
-.cv-preview__skill-label {
-    font-size: 10.5px;
-    font-weight: 600;
-    color: #374151;
-    margin-right: 2px;
-}
-
-.cv-preview__skill-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.cv-preview__chip {
-    display: inline-block;
-    padding: 1px 8px;
-    background: #f3f4f6;
-    color: #374151;
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: 500;
-    border: 1px solid #e5e7eb;
-}
-
-/* Languages */
-.cv-preview__lang-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 20px;
-}
-
-.cv-preview__lang-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+/* Hidden elements since we switched to bullet lists for these */
+.cv-preview__skill-group,
+.cv-preview__lang-grid,
+.cv-preview__divider {
+    display: none;
 }
 
 .cv-preview__lang-name {
