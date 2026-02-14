@@ -1,4 +1,4 @@
-import './SectionCard.css';
+import './SectionCard.scss';
 
 interface SectionCardProps {
     title: string;

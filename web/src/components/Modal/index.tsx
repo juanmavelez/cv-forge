@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { FormInput } from '../FormInput';
-import './Modal.css';
+import './Modal.scss';
 
 // --- Types ---
 interface ModalState {

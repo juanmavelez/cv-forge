@@ -6,10 +6,10 @@
     margin-bottom: 16px;
     transition: border-color var(--transition), box-shadow var(--transition);
     overflow: hidden;
-}
 
-.section-card:hover {
-    border-color: var(--text-tertiary);
+    &:hover {
+        border-color: var(--text-tertiary);
+    }
 }
 
 .section-card__header {
@@ -20,10 +20,10 @@
     cursor: pointer;
     user-select: none;
     transition: background var(--transition);
-}
 
-.section-card__header:hover {
-    background: var(--bg-tertiary);
+    &:hover {
+        background: var(--bg-tertiary);
+    }
 }
 
 .section-card__title {
@@ -33,10 +33,10 @@
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--text-primary);
-}
 
-.section-card__title .icon {
-    font-size: 1.1rem;
+    .icon {
+        font-size: 1.1rem;
+    }
 }
 
 .section-card__chevron {
@@ -45,19 +45,21 @@
     font-size: 0.8rem;
 }
 
-.section-card--open .section-card__chevron {
-    transform: rotate(180deg);
-}
-
 .section-card__body {
     padding: 0 18px 18px;
     background: var(--bg-secondary);
 }
 
-/* Animation */
-.section-card--open .section-card__body {
-    display: block;
-    animation: section-open 0.2s ease-out;
+/* Modifiers managed by parent state class */
+.section-card--open {
+    .section-card__chevron {
+        transform: rotate(180deg);
+    }
+
+    .section-card__body {
+        display: block;
+        animation: section-open 0.2s ease-out;
+    }
 }
 
 @keyframes section-open {

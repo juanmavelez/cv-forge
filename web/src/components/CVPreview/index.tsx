@@ -1,7 +1,7 @@
 import type { CVData, FontStyle } from '../../types';
 import { validateAndMergeStyle } from '../../validation';
 import { defaultLabels } from '../../types';
-import './CVPreview.css';
+import './CVPreview.scss';
 
 interface CVPreviewProps {
     data: CVData;

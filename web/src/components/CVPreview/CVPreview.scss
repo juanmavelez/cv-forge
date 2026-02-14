@@ -7,15 +7,15 @@
     padding: 24px 16px 24px 0;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
-}
 
-.cv-preview::-webkit-scrollbar {
-    width: 5px;
-}
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
 
-.cv-preview::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 3px;
+    &::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+    }
 }
 
 /* A4-like page */
@@ -31,15 +31,15 @@
     font-size: 11px;
     line-height: 1.55;
     min-height: 500px;
-}
 
-.cv-preview__page a {
-    color: #3366cc;
-    text-decoration: none;
-}
+    a {
+        color: #3366cc;
+        text-decoration: none;
 
-.cv-preview__page a:hover {
-    text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 /* Empty state */
@@ -132,10 +132,10 @@
 /* Entries (Experience, Education, Certs) */
 .cv-preview__entry {
     margin-bottom: 3mm;
-}
 
-.cv-preview__entry:last-child {
-    margin-bottom: 0;
+    &:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .cv-preview__entry--compact {
@@ -172,20 +172,20 @@
     margin: 1mm 0 0 0;
     padding: 0;
     list-style: none;
-}
 
-.cv-preview__bullets li {
-    font-size: 10pt;
-    color: rgb(40, 40, 40);
-    margin-bottom: 1mm;
-    line-height: 1.4;
-    position: relative;
-    padding-left: 8mm;
-}
+    li {
+        font-size: 10pt;
+        color: rgb(40, 40, 40);
+        margin-bottom: 1mm;
+        line-height: 1.4;
+        position: relative;
+        padding-left: 8mm;
 
-.cv-preview__bullets li::before {
-    content: "•";
-    position: absolute;
-    left: 4mm;
-    color: rgb(40, 40, 40);
+        &::before {
+            content: "•";
+            position: absolute;
+            left: 4mm;
+            color: rgb(40, 40, 40);
+        }
+    }
 }

@@ -81,10 +81,10 @@ a {
     color: var(--accent);
     text-decoration: none;
     transition: color var(--transition);
-}
 
-a:hover {
-    color: var(--accent-hover);
+    &:hover {
+        color: var(--accent-hover);
+    }
 }
 
 
@@ -124,12 +124,12 @@ h3 {
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
-}
 
-.page-title h1 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    h1 {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 }
 
 /* === Buttons === */
@@ -149,55 +149,55 @@ h3 {
     white-space: nowrap;
     user-select: none;
     line-height: 1.4;
-}
 
-.btn:active {
-    transform: scale(0.97);
+    &:active {
+        transform: scale(0.97);
+    }
 }
 
 .btn--primary {
     background: var(--accent);
     color: white;
     border-color: var(--accent);
-}
 
-.btn--primary:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-    box-shadow: var(--shadow-sm);
+    &:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .btn--secondary {
     background: transparent;
     color: var(--text-primary);
     border-color: var(--border);
-}
 
-.btn--secondary:hover {
-    background: var(--bg-hover);
-    border-color: var(--text-tertiary);
+    &:hover {
+        background: var(--bg-hover);
+        border-color: var(--text-tertiary);
+    }
 }
 
 .btn--danger {
     background: transparent;
     color: var(--danger);
     border-color: var(--danger);
-}
 
-.btn--danger:hover {
-    background: var(--danger-light);
-    border-color: var(--danger-hover);
+    &:hover {
+        background: var(--danger-light);
+        border-color: var(--danger-hover);
+    }
 }
 
 .btn--ghost {
     background: transparent;
     color: var(--text-secondary);
     padding: 6px 10px;
-}
 
-.btn--ghost:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
+    &:hover {
+        background: var(--bg-hover);
+        color: var(--text-primary);
+    }
 }
 
 .btn--icon {

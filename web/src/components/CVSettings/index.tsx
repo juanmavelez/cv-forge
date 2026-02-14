@@ -2,7 +2,7 @@ import { FormInput } from '../FormInput/index';
 import type { CVData, StyleConfig } from '../../types';
 import { validateAndMergeStyle } from '../../validation';
 import { defaultStyle } from '../../types';
-import './CVSettings.css';
+import './CVSettings.scss';
 
 interface CVSettingsProps {
     data: CVData;
@@ -18,7 +18,7 @@ export function CVSettings({ data, updateData }: CVSettingsProps) {
             </p>
 
             <div className="cv-settings__group">
-                <h3>🎨 Global Styling</h3>
+                <h3 className="cv-settings__group-title">🎨 Global Styling</h3>
                 <StyleConfigEntry
                     value={validateAndMergeStyle(data.style)}
                     onChange={style => updateData(d => ({ ...d, style }))}

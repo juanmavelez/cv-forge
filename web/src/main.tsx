@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 
-import './styles/main.css';
-import './styles/forms.css';
-import './styles/components.css';
-import './styles/layout.css';
+import './styles/main.scss';
+import './styles/forms.scss';
+import './styles/components.scss';
+import './styles/layout.scss';
 
 // Initialize theme before render
 const saved = localStorage.getItem('cv-forge-theme');

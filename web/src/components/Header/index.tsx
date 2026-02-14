@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Header.css';
+import './Header.scss';
 
 function getInitialTheme(): 'light' | 'dark' {
     const saved = localStorage.getItem('cv-forge-theme');
