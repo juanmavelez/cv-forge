@@ -1,0 +1,63 @@
+/* === App Header === */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(12px);
+    transition: background var(--transition), border-color var(--transition);
+}
+
+.app-header__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+}
+
+.app-header__brand svg {
+    width: 28px;
+    height: 28px;
+}
+
+.app-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* === Theme Toggle === */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 7px 9px;
+    border-radius: var(--radius-sm);
+    font-size: 1.1rem;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+    .app-header {
+        padding: 0 16px;
+    }
+}

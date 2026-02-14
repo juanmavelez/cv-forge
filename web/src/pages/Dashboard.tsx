@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api';
-import { useToast } from '../components/Toast';
-import { useModal } from '../components/Modal';
+import { useToast } from '../components/Toast/index';
+import { useModal } from '../components/Modal/index';
 import { emptyCVData } from '../types';
 import type { CV, CVExport } from '../types';
 

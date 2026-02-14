@@ -1,5 +1,6 @@
-import type { CVData, FontStyle } from '../types';
-import { defaultStyle, defaultLabels } from '../types';
+import type { CVData, FontStyle } from '../../types';
+import { defaultStyle, defaultLabels } from '../../types';
+import './CVPreview.css';
 
 interface CVPreviewProps {
     data: CVData;
@@ -9,15 +10,27 @@ interface CVPreviewProps {
 export function CVPreview({ data }: CVPreviewProps) {
     const p = data.personal;
     const fullName = [p.firstName, p.lastName].filter(Boolean).join(' ');
-    const s = data.style || defaultStyle();
+    const defaults = defaultStyle();
+    const s = data.style ? {
+        title1: { ...defaults.title1, ...data.style.title1 },
+        title2: { ...defaults.title2, ...data.style.title2 },
+        title3: { ...defaults.title3, ...data.style.title3 },
+        text1: { ...defaults.text1, ...data.style.text1 },
+        text2: { ...defaults.text2, ...data.style.text2 },
+        sub: { ...defaults.sub, ...data.style.sub },
+    } : defaults;
     const l = data.labels || defaultLabels();
 
-    const getStyle = (style: FontStyle): React.CSSProperties => ({
-        fontSize: `${style.size}pt`,
-        color: `rgb(${style.color.join(',')})`,
-        fontWeight: style.bold ? 'bold' : 'normal',
-        fontStyle: style.italic ? 'italic' : 'normal',
-    });
+    const getStyle = (style: FontStyle): React.CSSProperties => {
+        if (!style) return {};
+        const color = Array.isArray(style.color) ? `rgb(${style.color.join(',')})` : 'rgb(0,0,0)';
+        return {
+            fontSize: `${style.size}pt`,
+            color,
+            fontWeight: style.bold ? 'bold' : 'normal',
+            fontStyle: style.italic ? 'italic' : 'normal',
+        };
+    };
 
     const contactItems = [
         p.email && { icon: '✉', text: p.email, href: `mailto:${p.email}` },
@@ -55,7 +68,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                         </h1>
                     )}
                     {p.title && (
-                        <p className="cv-preview__title" style={getStyle({ ...s.title1, size: 14, bold: true })}>
+                        <p className="cv-preview__title" style={getStyle(s.title3)}>
                             {p.title}
                         </p>
                     )}

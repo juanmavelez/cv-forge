@@ -35,6 +35,7 @@ var (
 	defaultText1  = models.FontStyle{Size: 11, Color: []int{30, 30, 30}, Bold: true}
 	defaultText2  = models.FontStyle{Size: 10, Color: []int{40, 40, 40}}
 	defaultSub    = models.FontStyle{Size: 10, Color: []int{80, 80, 80}}
+	defaultTitle3 = models.FontStyle{Size: 14, Color: []int{20, 20, 20}, Bold: true}
 )
 
 func setStyle(pdf *fpdf.Fpdf, s models.FontStyle) {
@@ -71,6 +72,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	text1 := defaultText1
 	text2 := defaultText2
 	sub := defaultSub
+	title3style := defaultTitle3
 
 	if d.Style != nil {
 		if d.Style.Title1.Size > 0 {
@@ -88,6 +90,9 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 		if d.Style.Sub.Size > 0 {
 			sub = d.Style.Sub
 		}
+		if d.Style.Title3.Size > 0 {
+			title3style = d.Style.Title3
+		}
 	}
 
 	// --- Name ---
@@ -101,7 +106,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Professional Title ---
 	if d.Personal.Title != "" {
-		setStyle(pdf, models.FontStyle{Size: 14, Color: title1.Color, Bold: true})
+		setStyle(pdf, title3style)
 		pdf.CellFormat(0, 8, d.Personal.Title, "", 1, "C", false, 0, "")
 		pdf.Ln(3)
 	}

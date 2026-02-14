@@ -1,0 +1,73 @@
+/* === Section Card === */
+.section-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    overflow: hidden;
+}
+
+.section-card:hover {
+    border-color: var(--text-tertiary);
+}
+
+.section-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition);
+}
+
+.section-card__header:hover {
+    background: var(--bg-tertiary);
+}
+
+.section-card__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.section-card__title .icon {
+    font-size: 1.1rem;
+}
+
+.section-card__chevron {
+    transition: transform var(--transition);
+    color: var(--text-tertiary);
+    font-size: 0.8rem;
+}
+
+.section-card--open .section-card__chevron {
+    transform: rotate(180deg);
+}
+
+.section-card__body {
+    padding: 0 18px 18px;
+    background: var(--bg-secondary);
+}
+
+/* Animation */
+.section-card--open .section-card__body {
+    display: block;
+    animation: section-open 0.2s ease-out;
+}
+
+@keyframes section-open {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

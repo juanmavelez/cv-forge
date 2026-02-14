@@ -58,6 +58,7 @@ export interface StyleConfig {
     text1: FontStyle;
     text2: FontStyle;
     sub: FontStyle;
+    title3: FontStyle;
 }
 
 export interface SectionLabels {
@@ -112,6 +113,7 @@ export function defaultStyle(): StyleConfig {
         text1: { size: 11, color: [30, 30, 30], bold: true, italic: false },
         text2: { size: 10, color: [40, 40, 40], bold: false, italic: false },
         sub: { size: 10, color: [80, 80, 80], bold: false, italic: true },
+        title3: { size: 14, color: [20, 20, 20], bold: true, italic: false },
     };
 }
 

@@ -1,0 +1,72 @@
+/* === CV Settings === */
+.cv-settings {
+    animation: settings-in 0.2s ease-out;
+}
+
+.cv-settings__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.cv-settings__description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+}
+
+.cv-settings__group {
+    margin-bottom: 40px;
+}
+
+.cv-settings__group h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+.style-item {
+    margin-bottom: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+.style-item:last-child {
+    margin-bottom: 0;
+}
+
+.style-item__label {
+    margin: 0 0 12px 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.style-item__label::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+@keyframes settings-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

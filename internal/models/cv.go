@@ -70,6 +70,7 @@ type StyleConfig struct {
 	Text1  FontStyle `json:"text1"`
 	Text2  FontStyle `json:"text2"`
 	Sub    FontStyle `json:"sub"`
+	Title3 FontStyle `json:"title3"`
 }
 
 // SectionLabels defines customizable text for headings and static strings.

@@ -4,7 +4,7 @@ import { App } from './App';
 import './styles/main.css';
 import './styles/forms.css';
 import './styles/components.css';
-import './styles/preview.css';
+import './styles/layout.css';
 
 // Initialize theme before render
 const saved = localStorage.getItem('cv-forge-theme');

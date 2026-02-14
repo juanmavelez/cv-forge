@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { FormInput } from '../FormInput';
+import './Modal.css';
 
 // --- Types ---
 interface ModalState {
@@ -77,15 +79,12 @@ function ModalOverlay({ modal, close }: { modal: ModalState; close: (v: string |
                 )}
 
                 {modal.type === 'prompt' && (
-                    <div className="form-group">
-                        <label>{modal.label}</label>
-                        <input
-                            ref={inputRef}
-                            className="form-input"
-                            type="text"
-                            defaultValue={modal.defaultValue}
-                        />
-                    </div>
+                    <FormInput
+                        label={modal.label || ''}
+                        value={modal.defaultValue || ''}
+                        onChange={() => { }} // Controlled input logic needs improvement if we want true reactivity in prompt, but keeping current behavior
+                        placeholder=""
+                    />
                 )}
 
                 <div className="modal__actions">
