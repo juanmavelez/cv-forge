@@ -9,6 +9,7 @@ cv-forge
 
 # Frontend
 web/node_modules/
+web/coverage/
 
 # SQLite
 *.db

@@ -32,3 +32,6 @@ dev: deps
 clean:
 	rm -rf cv-forge cmd/server/dist web/node_modules
 	@echo "🧹 Cleaned."
+
+test: 
+	cd web && npm run test
