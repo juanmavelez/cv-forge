@@ -1,5 +1,6 @@
 import type { CVData, FontStyle } from '../../types';
-import { defaultStyle, defaultLabels } from '../../types';
+import { validateAndMergeStyle } from '../../validation';
+import { defaultLabels } from '../../types';
 import './CVPreview.css';
 
 interface CVPreviewProps {
@@ -10,15 +11,7 @@ interface CVPreviewProps {
 export function CVPreview({ data }: CVPreviewProps) {
     const p = data.personal;
     const fullName = [p.firstName, p.lastName].filter(Boolean).join(' ');
-    const defaults = defaultStyle();
-    const s = data.style ? {
-        title1: { ...defaults.title1, ...data.style.title1 },
-        title2: { ...defaults.title2, ...data.style.title2 },
-        title3: { ...defaults.title3, ...data.style.title3 },
-        text1: { ...defaults.text1, ...data.style.text1 },
-        text2: { ...defaults.text2, ...data.style.text2 },
-        sub: { ...defaults.sub, ...data.style.sub },
-    } : defaults;
+    const s = validateAndMergeStyle(data.style);
     const l = data.labels || defaultLabels();
 
     const getStyle = (style: FontStyle): React.CSSProperties => {

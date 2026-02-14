@@ -1,5 +1,6 @@
 import { FormInput } from '../FormInput/index';
 import type { CVData, StyleConfig } from '../../types';
+import { validateAndMergeStyle } from '../../validation';
 import { defaultStyle } from '../../types';
 import './CVSettings.css';
 
@@ -19,7 +20,7 @@ export function CVSettings({ data, updateData }: CVSettingsProps) {
             <div className="cv-settings__group">
                 <h3>🎨 Global Styling</h3>
                 <StyleConfigEntry
-                    value={data.style || defaultStyle()}
+                    value={validateAndMergeStyle(data.style)}
                     onChange={style => updateData(d => ({ ...d, style }))}
                 />
             </div>
@@ -32,11 +33,10 @@ function StyleConfigEntry({ value, onChange }: {
     value: StyleConfig;
     onChange: (s: StyleConfig) => void;
 }) {
-    // Helper to converting [r,g,b] to hex
     const toHex = (c: [number, number, number]) =>
         `#${c.map(x => x.toString(16).padStart(2, '0')).join('')}`;
 
-    // Helper to convert hex to [r,g,b]
+
     const fromHex = (hex: string): [number, number, number] => {
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
@@ -44,55 +44,45 @@ function StyleConfigEntry({ value, onChange }: {
         return [r, g, b];
     };
 
-    const updateTitles = (color: [number, number, number]) => {
+    const updateStyle = (key: keyof StyleConfig, color: [number, number, number]) => {
         onChange({
             ...value,
-            title1: { ...value.title1, color },
-            title2: { ...value.title2, color },
-            title3: { ...value.title3, color },
+            [key]: { ...value[key], color },
         });
     };
 
-    const updateText = (color: [number, number, number]) => {
-        onChange({
-            ...value,
-            text1: { ...value.text1, color },
-            text2: { ...value.text2, color },
-            sub: { ...value.sub, color },
-        });
-    };
+    const ColorPicker = ({ label, color, onChange }: { label: string, color: [number, number, number], onChange: (c: [number, number, number]) => void }) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)' }}>{label}</label>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <input
+                    className="form-input"
+                    type="color"
+                    style={{ width: '100%', padding: '2px', height: '36px' }}
+                    value={toHex(color)}
+                    onChange={e => onChange(fromHex(e.target.value))}
+                />
+            </div>
+        </div>
+    );
 
     return (
         <div className="style-config">
             <div className="form-group">
-                <label>Titles Color</label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <input
-                        className="form-input"
-                        type="color"
-                        style={{ width: '60px', padding: '2px', height: '40px' }}
-                        value={toHex(value.title1.color)}
-                        onChange={e => updateTitles(fromHex(e.target.value))}
-                    />
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                        Applies to name, section headings, and job titles
-                    </span>
-                </div>
-            </div>
+                <h4 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>Colors</h4>
 
-            <div className="form-group">
-                <label>Text Color</label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <input
-                        className="form-input"
-                        type="color"
-                        style={{ width: '60px', padding: '2px', height: '40px' }}
-                        value={toHex(value.text2.color)}
-                        onChange={e => updateText(fromHex(e.target.value))}
-                    />
-                    <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                        Applies to descriptions, details, and metadata
-                    </span>
+                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-secondary)' }}>Titles & Headings</h5>
+                <div className="form-row--3">
+                    <ColorPicker label="Name" color={value.title1.color} onChange={c => updateStyle('title1', c)} />
+                    <ColorPicker label="Prof. Title" color={value.title3.color} onChange={c => updateStyle('title3', c)} />
+                    <ColorPicker label="Section Headers" color={value.title2.color} onChange={c => updateStyle('title2', c)} />
+                </div>
+
+                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginTop: '12px', marginBottom: '8px', color: 'var(--text-secondary)' }}>Content</h5>
+                <div className="form-row--3">
+                    <ColorPicker label="Job/Degree" color={value.text1.color} onChange={c => updateStyle('text1', c)} />
+                    <ColorPicker label="Body Text" color={value.text2.color} onChange={c => updateStyle('text2', c)} />
+                    <ColorPicker label="Metadata" color={value.sub.color} onChange={c => updateStyle('sub', c)} />
                 </div>
             </div>
 
