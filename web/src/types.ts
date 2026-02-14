@@ -45,6 +45,21 @@ export interface Certification {
     url: string;
 }
 
+export interface FontStyle {
+    size: number;
+    color: [number, number, number];
+    bold: boolean;
+    italic: boolean;
+}
+
+export interface StyleConfig {
+    title1: FontStyle;
+    title2: FontStyle;
+    text1: FontStyle;
+    text2: FontStyle;
+    sub: FontStyle;
+}
+
 export interface CVData {
     personal: PersonalInfo;
     summary: string;
@@ -53,6 +68,7 @@ export interface CVData {
     skills: SkillGroup[];
     languages: Language[];
     certifications: Certification[];
+    style?: StyleConfig;
 }
 
 export interface CV {
@@ -78,6 +94,16 @@ export interface CVExport {
     versions?: CVVersion[];
 }
 
+export function defaultStyle(): StyleConfig {
+    return {
+        title1: { size: 18, color: [20, 20, 20], bold: false, italic: false },
+        title2: { size: 13, color: [78, 107, 138], bold: true, italic: false },
+        text1: { size: 11, color: [30, 30, 30], bold: true, italic: false },
+        text2: { size: 10, color: [40, 40, 40], bold: false, italic: false },
+        sub: { size: 10, color: [80, 80, 80], bold: false, italic: true },
+    };
+}
+
 export function emptyCVData(): CVData {
     return {
         personal: {
@@ -96,5 +122,6 @@ export function emptyCVData(): CVData {
         skills: [],
         languages: [],
         certifications: [],
+        style: defaultStyle(),
     };
 }

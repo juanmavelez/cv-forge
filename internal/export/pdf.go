@@ -29,9 +29,29 @@ func registerUTF8Fonts(pdf *fpdf.Fpdf) {
 	}
 }
 
-// GeneratePDF creates a clean one-column PDF from CV data, styled to match
-// the reference CV layout: centered header, slate-blue section titles in
-// Title Case without underlines, bullet-pointed lists, and generous spacing.
+var (
+	defaultTitle1 = models.FontStyle{Size: 18, Color: []int{20, 20, 20}}
+	defaultTitle2 = models.FontStyle{Size: 13, Color: []int{78, 107, 138}, Bold: true}
+	defaultText1  = models.FontStyle{Size: 11, Color: []int{30, 30, 30}, Bold: true}
+	defaultText2  = models.FontStyle{Size: 10, Color: []int{40, 40, 40}}
+	defaultSub    = models.FontStyle{Size: 10, Color: []int{80, 80, 80}}
+)
+
+func setStyle(pdf *fpdf.Fpdf, s models.FontStyle) {
+	style := ""
+	if s.Bold {
+		style += "B"
+	}
+	if s.Italic {
+		style += "I"
+	}
+	pdf.SetFont(fontFamily, style, s.Size)
+	if len(s.Color) == 3 {
+		pdf.SetTextColor(s.Color[0], s.Color[1], s.Color[2])
+	}
+}
+
+// GeneratePDF creates a clean one-column PDF from CV data.
 func GeneratePDF(cv *models.CV) ([]byte, error) {
 	pdf := fpdf.New("P", "mm", "A4", "")
 	pdf.SetMargins(25, 25, 25)
@@ -45,9 +65,33 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	pageWidth, _ := pdf.GetPageSize()
 	usableWidth := pageWidth - 50 // 25mm margins on each side
 
+	// Initialize styles with defaults, then override if present in CV data
+	title1 := defaultTitle1
+	title2 := defaultTitle2
+	text1 := defaultText1
+	text2 := defaultText2
+	sub := defaultSub
+
+	if d.Style != nil {
+		if d.Style.Title1.Size > 0 {
+			title1 = d.Style.Title1
+		}
+		if d.Style.Title2.Size > 0 {
+			title2 = d.Style.Title2
+		}
+		if d.Style.Text1.Size > 0 {
+			text1 = d.Style.Text1
+		}
+		if d.Style.Text2.Size > 0 {
+			text2 = d.Style.Text2
+		}
+		if d.Style.Sub.Size > 0 {
+			sub = d.Style.Sub
+		}
+	}
+
 	// --- Name ---
-	pdf.SetFont(fontFamily, "", 18)
-	pdf.SetTextColor(20, 20, 20)
+	setStyle(pdf, title1)
 	name := strings.TrimSpace(d.Personal.FirstName + " " + d.Personal.LastName)
 	if name == "" {
 		name = cv.Title
@@ -57,13 +101,12 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Professional Title ---
 	if d.Personal.Title != "" {
-		pdf.SetFont(fontFamily, "B", 14)
-		pdf.SetTextColor(20, 20, 20)
+		setStyle(pdf, models.FontStyle{Size: 14, Color: title1.Color, Bold: true})
 		pdf.CellFormat(0, 8, d.Personal.Title, "", 1, "C", false, 0, "")
 		pdf.Ln(3)
 	}
 
-	// --- Contact info (single centred line) ---
+	// --- Contact info ---
 	contactParts := []string{}
 	if d.Personal.Email != "" {
 		contactParts = append(contactParts, d.Personal.Email)
@@ -81,26 +124,24 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 		contactParts = append(contactParts, d.Personal.Location)
 	}
 	if len(contactParts) > 0 {
-		pdf.SetFont(fontFamily, "", 10)
-		pdf.SetTextColor(80, 80, 80)
+		setStyle(pdf, sub)
 		pdf.CellFormat(0, 5, strings.Join(contactParts, "  |  "), "", 1, "C", false, 0, "")
 	}
 	pdf.Ln(6)
 
 	// --- Summary ---
 	if d.Summary != "" {
-		sectionHeading(pdf, "Summary")
-		pdf.SetFont(fontFamily, "", 10)
-		pdf.SetTextColor(40, 40, 40)
+		renderSectionHeading(pdf, "Summary", title2)
+		setStyle(pdf, text2)
 		pdf.MultiCell(0, 5, d.Summary, "", "L", false)
 		pdf.Ln(5)
 	}
 
 	// --- Skills ---
 	if len(d.Skills) > 0 {
-		sectionHeading(pdf, "Skills")
+		renderSectionHeading(pdf, "Skills", title2)
 		for _, sg := range d.Skills {
-			bulletText(pdf, sg.Category+": "+strings.Join(sg.Items, ", "), usableWidth)
+			renderBulletText(pdf, sg.Category+": "+strings.Join(sg.Items, ", "), usableWidth, text2)
 			pdf.Ln(1)
 		}
 		pdf.Ln(4)
@@ -108,9 +149,8 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Experience ---
 	if len(d.Experience) > 0 {
-		sectionHeading(pdf, "Professional Experience")
+		renderSectionHeading(pdf, "Professional Experience", title2)
 		for _, exp := range d.Experience {
-			// Title | Company (Location) — bold line
 			header := exp.Title
 			if exp.Company != "" {
 				header += " | " + exp.Company
@@ -118,24 +158,20 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			if exp.Location != "" {
 				header += " (" + exp.Location + ")"
 			}
-			pdf.SetFont(fontFamily, "B", 11)
-			pdf.SetTextColor(30, 30, 30)
+			setStyle(pdf, text1)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
-			// Dates — italic
 			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current)
 			if dateStr != "" {
-				pdf.SetFont(fontFamily, "I", 10)
-				pdf.SetTextColor(80, 80, 80)
+				setStyle(pdf, models.FontStyle{Size: sub.Size, Color: sub.Color, Italic: true})
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
 			}
 			pdf.Ln(2)
 
-			// Description — bullet points (split by newlines)
 			if exp.Description != "" {
 				lines := splitDescriptionLines(exp.Description)
 				for _, line := range lines {
-					bulletText(pdf, line, usableWidth)
+					renderBulletText(pdf, line, usableWidth, text2)
 					pdf.Ln(1)
 				}
 			}
@@ -146,7 +182,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Education ---
 	if len(d.Education) > 0 {
-		sectionHeading(pdf, "Education")
+		renderSectionHeading(pdf, "Education", title2)
 		for _, edu := range d.Education {
 			degreeField := edu.Degree
 			if edu.Field != "" {
@@ -156,21 +192,18 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			if edu.Institution != "" {
 				header += " | " + edu.Institution
 			}
-			pdf.SetFont(fontFamily, "B", 11)
-			pdf.SetTextColor(30, 30, 30)
+			setStyle(pdf, text1)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
 			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false)
 			if dateStr != "" {
-				pdf.SetFont(fontFamily, "I", 10)
-				pdf.SetTextColor(80, 80, 80)
+				setStyle(pdf, models.FontStyle{Size: sub.Size, Color: sub.Color, Italic: true})
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
 			}
 
 			if edu.Description != "" {
 				pdf.Ln(2)
-				pdf.SetFont(fontFamily, "", 10)
-				pdf.SetTextColor(40, 40, 40)
+				setStyle(pdf, text2)
 				pdf.MultiCell(0, 5, edu.Description, "", "L", false)
 			}
 			pdf.Ln(3)
@@ -180,13 +213,13 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Languages ---
 	if len(d.Languages) > 0 {
-		sectionHeading(pdf, "Languages")
+		renderSectionHeading(pdf, "Languages", title2)
 		for _, lang := range d.Languages {
 			text := lang.Language
 			if lang.Proficiency != "" {
 				text += ": " + lang.Proficiency
 			}
-			bulletText(pdf, text, usableWidth)
+			renderBulletText(pdf, text, usableWidth, text2)
 			pdf.Ln(1)
 		}
 		pdf.Ln(4)
@@ -194,19 +227,17 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Certifications ---
 	if len(d.Certifications) > 0 {
-		sectionHeading(pdf, "Certifications")
+		renderSectionHeading(pdf, "Certifications", title2)
 		for _, cert := range d.Certifications {
 			header := cert.Name
 			if cert.Issuer != "" {
 				header += " | " + cert.Issuer
 			}
-			pdf.SetFont(fontFamily, "B", 10)
-			pdf.SetTextColor(30, 30, 30)
+			setStyle(pdf, text1)
 			pdf.CellFormat(0, 5, header, "", 1, "L", false, 0, "")
 
 			if cert.Date != "" {
-				pdf.SetFont(fontFamily, "I", 10)
-				pdf.SetTextColor(80, 80, 80)
+				setStyle(pdf, models.FontStyle{Size: sub.Size, Color: sub.Color, Italic: true})
 				pdf.CellFormat(0, 5, cert.Date, "", 1, "L", false, 0, "")
 			}
 			pdf.Ln(2)
@@ -220,19 +251,16 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// sectionHeading renders a slate-blue Title Case heading with no underline.
-func sectionHeading(pdf *fpdf.Fpdf, title string) {
-	pdf.SetFont(fontFamily, "B", 13)
-	// Slate blue matching the target PDF
-	pdf.SetTextColor(78, 107, 138)
+// renderSectionHeading renders a section title using the provided style.
+func renderSectionHeading(pdf *fpdf.Fpdf, title string, style models.FontStyle) {
+	setStyle(pdf, style)
 	pdf.CellFormat(0, 7, title, "", 1, "L", false, 0, "")
 	pdf.Ln(2)
 }
 
-// bulletText renders a bullet-pointed line: "• text".
-func bulletText(pdf *fpdf.Fpdf, text string, usableWidth float64) {
-	pdf.SetFont(fontFamily, "", 10)
-	pdf.SetTextColor(40, 40, 40)
+// renderBulletText renders a bullet-pointed line using the provided style.
+func renderBulletText(pdf *fpdf.Fpdf, text string, usableWidth float64, style models.FontStyle) {
+	setStyle(pdf, style)
 	bullet := "    •   "
 	bulletW := pdf.GetStringWidth(bullet)
 	pdf.CellFormat(bulletW, 5, bullet, "", 0, "L", false, 0, "")

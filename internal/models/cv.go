@@ -55,6 +55,23 @@ type Certification struct {
 	URL    string `json:"url"`
 }
 
+// FontStyle defines the appearance of a text element.
+type FontStyle struct {
+	Size   float64 `json:"size"`
+	Color  []int   `json:"color"`
+	Bold   bool    `json:"bold"`
+	Italic bool    `json:"italic"`
+}
+
+// StyleConfig holds all the style definitions for a CV.
+type StyleConfig struct {
+	Title1 FontStyle `json:"title1"`
+	Title2 FontStyle `json:"title2"`
+	Text1  FontStyle `json:"text1"`
+	Text2  FontStyle `json:"text2"`
+	Sub    FontStyle `json:"sub"`
+}
+
 // CVData holds all the structured content of a CV.
 type CVData struct {
 	Personal       PersonalInfo    `json:"personal"`
@@ -64,6 +81,7 @@ type CVData struct {
 	Skills         []SkillGroup    `json:"skills"`
 	Languages      []Language      `json:"languages"`
 	Certifications []Certification `json:"certifications"`
+	Style          *StyleConfig    `json:"style,omitempty"`
 }
 
 // CV represents a complete CV with metadata.
@@ -103,8 +121,8 @@ type CreateVersionRequest struct {
 
 // CVExport is the JSON export format for a CV.
 type CVExport struct {
-	Title     string    `json:"title"`
-	Data      CVData    `json:"data"`
-	ExportedAt time.Time `json:"exportedAt"`
-	Versions  []CVVersion `json:"versions,omitempty"`
+	Title      string      `json:"title"`
+	Data       CVData      `json:"data"`
+	ExportedAt time.Time   `json:"exportedAt"`
+	Versions   []CVVersion `json:"versions,omitempty"`
 }

@@ -4,7 +4,8 @@ import { api } from '../api';
 import { useToast } from '../components/Toast';
 import { useModal } from '../components/Modal';
 import { CVPreview } from '../components/CVPreview';
-import type { CVData, Experience, Education, SkillGroup, Language, Certification } from '../types';
+import type { CVData, Experience, Education, SkillGroup, Language, Certification, StyleConfig, FontStyle } from '../types';
+import { defaultStyle } from '../types';
 
 // Debounce timer ref
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -228,6 +229,14 @@ export function Editor() {
                             certifications: [...d.certifications, { name: '', issuer: '', date: '', url: '' }],
                         }))}>+ Add Certification</button>
                     </SectionCard>
+
+                    {/* Global Styling */}
+                    <SectionCard title="Global Styling" icon="🎨" isOpen={!!openSections.styling} onToggle={() => toggleSection('styling')}>
+                        <StyleConfigEntry
+                            value={data.style || defaultStyle()}
+                            onChange={style => updateData(d => ({ ...d, style }))}
+                        />
+                    </SectionCard>
                 </div>
 
                 {/* Right: Live Preview */}
@@ -450,6 +459,80 @@ function CertificationEntry({ index, entry, onChange, onRemove }: {
                 <FormInput label="Date" value={entry.date} type="month" onChange={v => up({ date: v })} />
             </div>
             <FormInput label="URL" value={entry.url} onChange={v => up({ url: v })} />
+        </div>
+    );
+}
+function StyleConfigEntry({ value, onChange }: {
+    value: StyleConfig;
+    onChange: (s: StyleConfig) => void;
+}) {
+    const updateStyle = (key: keyof StyleConfig, partial: Partial<FontStyle>) => {
+        onChange({
+            ...value,
+            [key]: { ...value[key], ...partial },
+        });
+    };
+
+    const StyleItem = ({ label, styleKey, style }: { label: string; styleKey: keyof StyleConfig; style: FontStyle }) => (
+        <div className="style-item" style={{ marginBottom: '16px', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+            <h4 style={{ margin: '0 0 12px 0' }}>{label}</h4>
+            <div className="form-row--3">
+                <FormInput
+                    label="Font Size (pt)"
+                    type="number"
+                    value={style.size.toString()}
+                    onChange={v => updateStyle(styleKey, { size: parseFloat(v) || 0 })}
+                />
+                <div className="form-group">
+                    <label>Color</label>
+                    <input
+                        className="form-input"
+                        type="color"
+                        value={`#${style.color.map(c => c.toString(16).padStart(2, '0')).join('')}`}
+                        onChange={e => {
+                            const hex = e.target.value;
+                            const r = parseInt(hex.slice(1, 3), 16);
+                            const g = parseInt(hex.slice(3, 5), 16);
+                            const b = parseInt(hex.slice(5, 7), 16);
+                            updateStyle(styleKey, { color: [r, g, b] });
+                        }}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Weight / Style</label>
+                    <div className="form-row">
+                        <label className="form-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={style.bold}
+                                onChange={e => updateStyle(styleKey, { bold: e.target.checked })}
+                            />
+                            Bold
+                        </label>
+                        <label className="form-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={style.italic}
+                                onChange={e => updateStyle(styleKey, { italic: e.target.checked })}
+                            />
+                            Italic
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="style-config">
+            <StyleItem label="Main Name (Large Title)" styleKey="title1" style={value.title1} />
+            <StyleItem label="Section Headings" styleKey="title2" style={value.title2} />
+            <StyleItem label="Experience/Education Titles" styleKey="text1" style={value.text1} />
+            <StyleItem label="Body Text" styleKey="text2" style={value.text2} />
+            <StyleItem label="Contact & Dates" styleKey="sub" style={value.sub} />
+            <button className="btn btn--secondary btn--sm" onClick={() => onChange(defaultStyle())} style={{ marginTop: '8px' }}>
+                Reset to Defaults
+            </button>
         </div>
     );
 }
