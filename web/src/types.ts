@@ -60,6 +60,16 @@ export interface StyleConfig {
     sub: FontStyle;
 }
 
+export interface SectionLabels {
+    summary: string;
+    experience: string;
+    education: string;
+    skills: string;
+    languages: string;
+    certifications: string;
+    present: string;
+}
+
 export interface CVData {
     personal: PersonalInfo;
     summary: string;
@@ -69,6 +79,7 @@ export interface CVData {
     languages: Language[];
     certifications: Certification[];
     style?: StyleConfig;
+    labels?: SectionLabels;
 }
 
 export interface CV {
@@ -104,6 +115,18 @@ export function defaultStyle(): StyleConfig {
     };
 }
 
+export function defaultLabels(): SectionLabels {
+    return {
+        summary: 'Summary',
+        experience: 'Professional Experience',
+        education: 'Education',
+        skills: 'Skills',
+        languages: 'Languages',
+        certifications: 'Certifications',
+        present: 'Present',
+    };
+}
+
 export function emptyCVData(): CVData {
     return {
         personal: {
@@ -123,5 +146,6 @@ export function emptyCVData(): CVData {
         languages: [],
         certifications: [],
         style: defaultStyle(),
+        labels: defaultLabels(),
     };
 }

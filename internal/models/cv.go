@@ -72,6 +72,17 @@ type StyleConfig struct {
 	Sub    FontStyle `json:"sub"`
 }
 
+// SectionLabels defines customizable text for headings and static strings.
+type SectionLabels struct {
+	Summary        string `json:"summary"`
+	Experience     string `json:"experience"`
+	Education      string `json:"education"`
+	Skills         string `json:"skills"`
+	Languages      string `json:"languages"`
+	Certifications string `json:"certifications"`
+	Present        string `json:"present"`
+}
+
 // CVData holds all the structured content of a CV.
 type CVData struct {
 	Personal       PersonalInfo    `json:"personal"`
@@ -82,6 +93,7 @@ type CVData struct {
 	Languages      []Language      `json:"languages"`
 	Certifications []Certification `json:"certifications"`
 	Style          *StyleConfig    `json:"style,omitempty"`
+	Labels         *SectionLabels  `json:"labels,omitempty"`
 }
 
 // CV represents a complete CV with metadata.

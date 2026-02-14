@@ -4,8 +4,8 @@ import { api } from '../api';
 import { useToast } from '../components/Toast';
 import { useModal } from '../components/Modal';
 import { CVPreview } from '../components/CVPreview';
-import type { CVData, Experience, Education, SkillGroup, Language, Certification, StyleConfig, FontStyle } from '../types';
-import { defaultStyle } from '../types';
+import type { CVData, Experience, Education, SkillGroup, Language, Certification, StyleConfig, FontStyle, SectionLabels } from '../types';
+import { defaultStyle, defaultLabels } from '../types';
 
 // Debounce timer ref
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
@@ -235,6 +235,14 @@ export function Editor() {
                         <StyleConfigEntry
                             value={data.style || defaultStyle()}
                             onChange={style => updateData(d => ({ ...d, style }))}
+                        />
+                    </SectionCard>
+
+                    {/* Section Labels */}
+                    <SectionCard title="Section Labels" icon="🏷" isOpen={!!openSections.labels} onToggle={() => toggleSection('labels')}>
+                        <LabelConfigEntry
+                            value={data.labels || defaultLabels()}
+                            onChange={labels => updateData(d => ({ ...d, labels }))}
                         />
                     </SectionCard>
                 </div>
@@ -525,13 +533,41 @@ function StyleConfigEntry({ value, onChange }: {
 
     return (
         <div className="style-config">
-            <StyleItem label="Main Name (Large Title)" styleKey="title1" style={value.title1} />
-            <StyleItem label="Section Headings" styleKey="title2" style={value.title2} />
-            <StyleItem label="Experience/Education Titles" styleKey="text1" style={value.text1} />
-            <StyleItem label="Body Text" styleKey="text2" style={value.text2} />
-            <StyleItem label="Contact & Dates" styleKey="sub" style={value.sub} />
+            <StyleItem label="Global: Main Titles (Name & Professional Role)" styleKey="title1" style={value.title1} />
+            <StyleItem label="Global: Section Headings (Experience, Skills, etc.)" styleKey="title2" style={value.title2} />
+            <StyleItem label="Global: Entry Titles (Job title, Institution)" styleKey="text1" style={value.text1} />
+            <StyleItem label="Global: Body Text (Descriptions, Skills items)" styleKey="text2" style={value.text2} />
+            <StyleItem label="Global: Metadata & Dates (Location, Date ranges)" styleKey="sub" style={value.sub} />
             <button className="btn btn--secondary btn--sm" onClick={() => onChange(defaultStyle())} style={{ marginTop: '8px' }}>
-                Reset to Defaults
+                Reset Styles to Defaults
+            </button>
+        </div>
+    );
+}
+
+function LabelConfigEntry({ value, onChange }: {
+    value: SectionLabels;
+    onChange: (l: SectionLabels) => void;
+}) {
+    const up = (partial: Partial<SectionLabels>) => onChange({ ...value, ...partial });
+
+    return (
+        <div className="label-config">
+            <div className="form-row">
+                <FormInput label="Summary Section" value={value.summary} onChange={v => up({ summary: v })} />
+                <FormInput label="Experience Section" value={value.experience} onChange={v => up({ experience: v })} />
+            </div>
+            <div className="form-row">
+                <FormInput label="Education Section" value={value.education} onChange={v => up({ education: v })} />
+                <FormInput label="Skills Section" value={value.skills} onChange={v => up({ skills: v })} />
+            </div>
+            <div className="form-row">
+                <FormInput label="Languages Section" value={value.languages} onChange={v => up({ languages: v })} />
+                <FormInput label="Certifications Section" value={value.certifications} onChange={v => up({ certifications: v })} />
+            </div>
+            <FormInput label="'Present' Date Label" value={value.present} onChange={v => up({ present: v })} placeholder="e.g. Currently" />
+            <button className="btn btn--secondary btn--sm" onClick={() => onChange(defaultLabels())} style={{ marginTop: '8px' }}>
+                Reset Labels to Defaults
             </button>
         </div>
     );

@@ -166,13 +166,21 @@ func documentXML(cv *models.CV) (string, error) {
 
 	// Summary
 	if d.Summary != "" {
-		b.WriteString(paragraph("Heading1", "Summary"))
+		label := "Summary"
+		if d.Labels != nil && d.Labels.Summary != "" {
+			label = d.Labels.Summary
+		}
+		b.WriteString(paragraph("Heading1", label))
 		b.WriteString(paragraph("Normal", d.Summary))
 	}
 
 	// Skills
 	if len(d.Skills) > 0 {
-		b.WriteString(paragraph("Heading1", "Skills"))
+		label := "Skills"
+		if d.Labels != nil && d.Labels.Skills != "" {
+			label = d.Labels.Skills
+		}
+		b.WriteString(paragraph("Heading1", label))
 		for _, sg := range d.Skills {
 			b.WriteString(paragraphBoldNormal("•  "+sg.Category+": ", strings.Join(sg.Items, ", ")))
 		}
@@ -180,7 +188,11 @@ func documentXML(cv *models.CV) (string, error) {
 
 	// Experience
 	if len(d.Experience) > 0 {
-		b.WriteString(paragraph("Heading1", "Professional Experience"))
+		label := "Professional Experience"
+		if d.Labels != nil && d.Labels.Experience != "" {
+			label = d.Labels.Experience
+		}
+		b.WriteString(paragraph("Heading1", label))
 		for _, exp := range d.Experience {
 			header := exp.Title
 			if exp.Company != "" {
@@ -190,7 +202,12 @@ func documentXML(cv *models.CV) (string, error) {
 				header += " (" + exp.Location + ")"
 			}
 			b.WriteString(paragraph("Heading2", header))
-			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current)
+
+			presentLabel := "Present"
+			if d.Labels != nil && d.Labels.Present != "" {
+				presentLabel = d.Labels.Present
+			}
+			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current, presentLabel)
 			if dateStr != "" {
 				b.WriteString(paragraph("Meta", dateStr))
 			}
@@ -205,7 +222,11 @@ func documentXML(cv *models.CV) (string, error) {
 
 	// Education
 	if len(d.Education) > 0 {
-		b.WriteString(paragraph("Heading1", "Education"))
+		label := "Education"
+		if d.Labels != nil && d.Labels.Education != "" {
+			label = d.Labels.Education
+		}
+		b.WriteString(paragraph("Heading1", label))
 		for _, edu := range d.Education {
 			degreeField := edu.Degree
 			if edu.Field != "" {
@@ -216,7 +237,7 @@ func documentXML(cv *models.CV) (string, error) {
 				header += " | " + edu.Institution
 			}
 			b.WriteString(paragraph("Heading2", header))
-			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false)
+			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false, "")
 			if dateStr != "" {
 				b.WriteString(paragraph("Meta", dateStr))
 			}
@@ -228,7 +249,11 @@ func documentXML(cv *models.CV) (string, error) {
 
 	// Languages
 	if len(d.Languages) > 0 {
-		b.WriteString(paragraph("Heading1", "Languages"))
+		label := "Languages"
+		if d.Labels != nil && d.Labels.Languages != "" {
+			label = d.Labels.Languages
+		}
+		b.WriteString(paragraph("Heading1", label))
 		for _, lang := range d.Languages {
 			text := lang.Language
 			if lang.Proficiency != "" {
@@ -240,7 +265,11 @@ func documentXML(cv *models.CV) (string, error) {
 
 	// Certifications
 	if len(d.Certifications) > 0 {
-		b.WriteString(paragraph("Heading1", "Certifications"))
+		label := "Certifications"
+		if d.Labels != nil && d.Labels.Certifications != "" {
+			label = d.Labels.Certifications
+		}
+		b.WriteString(paragraph("Heading1", label))
 		for _, cert := range d.Certifications {
 			header := cert.Name
 			if cert.Issuer != "" {

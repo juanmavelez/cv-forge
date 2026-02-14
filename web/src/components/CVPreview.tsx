@@ -1,5 +1,5 @@
 import type { CVData, FontStyle } from '../types';
-import { defaultStyle } from '../types';
+import { defaultStyle, defaultLabels } from '../types';
 
 interface CVPreviewProps {
     data: CVData;
@@ -10,6 +10,7 @@ export function CVPreview({ data }: CVPreviewProps) {
     const p = data.personal;
     const fullName = [p.firstName, p.lastName].filter(Boolean).join(' ');
     const s = data.style || defaultStyle();
+    const l = data.labels || defaultLabels();
 
     const getStyle = (style: FontStyle): React.CSSProperties => ({
         fontSize: `${style.size}pt`,
@@ -77,7 +78,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Summary */}
                 {data.summary && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Summary</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.summary}</h2>
                         <p className="cv-preview__summary" style={getStyle(s.text2)}>{data.summary}</p>
                     </section>
                 )}
@@ -85,7 +86,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Skills */}
                 {data.skills.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Skills</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.skills}</h2>
                         {data.skills.map((sg, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <ul className="cv-preview__bullets">
@@ -101,7 +102,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Experience */}
                 {data.experience.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Professional Experience</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.experience}</h2>
                         {data.experience.map((exp, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
@@ -114,7 +115,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                                 <div className="cv-preview__entry-dates" style={getStyle({ ...s.sub, italic: true })}>
                                     {formatDate(exp.startDate)}
                                     {(exp.startDate || exp.endDate || exp.current) && ' – '}
-                                    {exp.current ? 'Present' : formatDate(exp.endDate)}
+                                    {exp.current ? l.present : formatDate(exp.endDate)}
                                 </div>
                                 {exp.description && (
                                     <ul className="cv-preview__bullets">
@@ -133,7 +134,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Education */}
                 {data.education.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Education</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.education}</h2>
                         {data.education.map((edu, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
@@ -160,7 +161,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Languages */}
                 {data.languages.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Languages</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.languages}</h2>
                         {data.languages.map((lang, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <ul className="cv-preview__bullets">
@@ -177,7 +178,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Certifications */}
                 {data.certifications.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>Certifications</h2>
+                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.certifications}</h2>
                         {data.certifications.map((cert, i) => (
                             <div key={i} className="cv-preview__entry cv-preview__entry--compact">
                                 <div className="cv-preview__entry-header">

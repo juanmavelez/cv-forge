@@ -131,7 +131,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Summary ---
 	if d.Summary != "" {
-		renderSectionHeading(pdf, "Summary", title2)
+		label := "Summary"
+		if d.Labels != nil && d.Labels.Summary != "" {
+			label = d.Labels.Summary
+		}
+		renderSectionHeading(pdf, label, title2)
 		setStyle(pdf, text2)
 		pdf.MultiCell(0, 5, d.Summary, "", "L", false)
 		pdf.Ln(5)
@@ -139,7 +143,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Skills ---
 	if len(d.Skills) > 0 {
-		renderSectionHeading(pdf, "Skills", title2)
+		label := "Skills"
+		if d.Labels != nil && d.Labels.Skills != "" {
+			label = d.Labels.Skills
+		}
+		renderSectionHeading(pdf, label, title2)
 		for _, sg := range d.Skills {
 			renderBulletText(pdf, sg.Category+": "+strings.Join(sg.Items, ", "), usableWidth, text2)
 			pdf.Ln(1)
@@ -149,7 +157,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Experience ---
 	if len(d.Experience) > 0 {
-		renderSectionHeading(pdf, "Professional Experience", title2)
+		label := "Professional Experience"
+		if d.Labels != nil && d.Labels.Experience != "" {
+			label = d.Labels.Experience
+		}
+		renderSectionHeading(pdf, label, title2)
 		for _, exp := range d.Experience {
 			header := exp.Title
 			if exp.Company != "" {
@@ -161,7 +173,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			setStyle(pdf, text1)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
-			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current)
+			presentLabel := "Present"
+			if d.Labels != nil && d.Labels.Present != "" {
+				presentLabel = d.Labels.Present
+			}
+			dateStr := formatDateRange(exp.StartDate, exp.EndDate, exp.Current, presentLabel)
 			if dateStr != "" {
 				setStyle(pdf, models.FontStyle{Size: sub.Size, Color: sub.Color, Italic: true})
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
@@ -182,7 +198,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Education ---
 	if len(d.Education) > 0 {
-		renderSectionHeading(pdf, "Education", title2)
+		label := "Education"
+		if d.Labels != nil && d.Labels.Education != "" {
+			label = d.Labels.Education
+		}
+		renderSectionHeading(pdf, label, title2)
 		for _, edu := range d.Education {
 			degreeField := edu.Degree
 			if edu.Field != "" {
@@ -195,7 +215,7 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 			setStyle(pdf, text1)
 			pdf.CellFormat(0, 6, header, "", 1, "L", false, 0, "")
 
-			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false)
+			dateStr := formatDateRange(edu.StartDate, edu.EndDate, false, "")
 			if dateStr != "" {
 				setStyle(pdf, models.FontStyle{Size: sub.Size, Color: sub.Color, Italic: true})
 				pdf.CellFormat(0, 5, " "+dateStr, "", 1, "L", false, 0, "")
@@ -213,7 +233,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Languages ---
 	if len(d.Languages) > 0 {
-		renderSectionHeading(pdf, "Languages", title2)
+		label := "Languages"
+		if d.Labels != nil && d.Labels.Languages != "" {
+			label = d.Labels.Languages
+		}
+		renderSectionHeading(pdf, label, title2)
 		for _, lang := range d.Languages {
 			text := lang.Language
 			if lang.Proficiency != "" {
@@ -227,7 +251,11 @@ func GeneratePDF(cv *models.CV) ([]byte, error) {
 
 	// --- Certifications ---
 	if len(d.Certifications) > 0 {
-		renderSectionHeading(pdf, "Certifications", title2)
+		label := "Certifications"
+		if d.Labels != nil && d.Labels.Certifications != "" {
+			label = d.Labels.Certifications
+		}
+		renderSectionHeading(pdf, label, title2)
 		for _, cert := range d.Certifications {
 			header := cert.Name
 			if cert.Issuer != "" {
@@ -288,9 +316,13 @@ func splitDescriptionLines(desc string) []string {
 	return lines
 }
 
-func formatDateRange(start, end string, current bool) string {
+func formatDateRange(start, end string, current bool, presentLabel string) string {
 	if start == "" && end == "" && !current {
 		return ""
+	}
+
+	if presentLabel == "" {
+		presentLabel = "Present"
 	}
 
 	formatDate := func(s string) string {
@@ -314,7 +346,7 @@ func formatDateRange(start, end string, current bool) string {
 
 	sFormatted := formatDate(start)
 	if current {
-		return sFormatted + " – Present"
+		return sFormatted + " – " + presentLabel
 	}
 
 	eFormatted := formatDate(end)
