@@ -85,3 +85,22 @@
         height: 64px;
     }
 }
+.app-header__nav {
+    display: flex;
+    gap: 20px;
+    margin-left: 32px;
+    flex: 1;
+}
+
+.app-header__link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 14px;
+    transition: color 0.2s;
+
+    &:hover,
+    &.active {
+        color: var(--primary);
+    }
+}

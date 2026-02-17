@@ -51,6 +51,20 @@ func (db *DB) migrate() error {
 			message TEXT NOT NULL DEFAULT '',
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 		)`,
+		`CREATE TABLE IF NOT EXISTS applications (
+			id TEXT PRIMARY KEY,
+			company TEXT NOT NULL,
+			role TEXT NOT NULL,
+			status TEXT NOT NULL,
+			salary TEXT,
+			url TEXT,
+			date DATETIME DEFAULT CURRENT_TIMESTAMP,
+			notes TEXT,
+			cv_id TEXT REFERENCES cvs(id) ON DELETE SET NULL,
+			cv_version_id TEXT REFERENCES cv_versions(id) ON DELETE SET NULL,
+			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+			updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		)`,
 	}
 	for _, m := range migrations {
 		if _, err := db.conn.Exec(m); err != nil {

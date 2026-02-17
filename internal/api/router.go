@@ -43,6 +43,16 @@ func NewRouter(database *db.DB, staticFS http.FileSystem) *chi.Mux {
 			r.Post("/versions", h.createVersion)
 			r.Get("/versions/{vid}", h.getVersion)
 			r.Post("/versions/{vid}/restore", h.restoreVersion)
+			r.Post("/versions/{vid}/restore", h.restoreVersion)
+		})
+
+		// Job Applications
+		r.Get("/applications", h.listApplications)
+		r.Post("/applications", h.createApplication)
+		r.Route("/applications/{id}", func(r chi.Router) {
+			r.Get("/", h.getApplication)
+			r.Put("/", h.updateApplication)
+			r.Delete("/", h.deleteApplication)
 		})
 	})
 

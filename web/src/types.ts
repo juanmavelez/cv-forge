@@ -106,6 +106,42 @@ export interface CVExport {
     versions?: CVVersion[];
 }
 
+export enum ApplicationStatus {
+    Applied = "Applied",
+    Interviewing = "Interviewing",
+    Rejected = "Rejected",
+    Offer = "Offer",
+}
+
+export interface Application {
+    id: string;
+    company: string;
+    role: string;
+    status: ApplicationStatus;
+    salary: string;
+    url: string;
+    date: string;
+    notes: string;
+    cvId?: string;
+    cvVersionId?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface CreateApplicationRequest {
+    company: string;
+    role: string;
+    status: ApplicationStatus;
+    salary: string;
+    url: string;
+    date: string;
+    notes: string;
+    cvId?: string;
+    cvVersionId?: string;
+}
+
+export interface UpdateApplicationRequest extends CreateApplicationRequest { }
+
 export function defaultStyle(): StyleConfig {
     return {
         title1: { size: 18, color: [20, 20, 20], bold: false, italic: false },

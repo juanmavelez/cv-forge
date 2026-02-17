@@ -32,6 +32,11 @@ export function Header() {
                 <span>CV Forge</span>
             </Link>
 
+            <nav className="app-header__nav">
+                <Link to="/" className="app-header__link">CVs</Link>
+                <Link to="/tracker" className="app-header__link">Tracker</Link>
+            </nav>
+
             <div className="app-header__actions">
                 <button className="theme-toggle" title="Toggle theme" onClick={toggleTheme}>
                     {theme === 'dark' ? '☀️' : '🌙'}
