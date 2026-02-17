@@ -7,6 +7,7 @@ import { Editor } from './pages/Editor/index';
 import { History } from './pages/History';
 import { JobTracker } from './pages/JobTracker';
 import { ApplicationEditor } from './pages/JobTracker/ApplicationEditor';
+import { ComponentsPage } from './pages/Components';
 
 export function App() {
     return (
@@ -20,6 +21,7 @@ export function App() {
                             <Route path="/tracker" element={<JobTracker />} />
                             <Route path="/tracker/new" element={<ApplicationEditor />} />
                             <Route path="/tracker/:id" element={<ApplicationEditor />} />
+                            <Route path="/components" element={<ComponentsPage />} />
                             <Route path="/cv/:id" element={<Editor />} />
                             <Route path="/cv/:id/history" element={<History />} />
                             <Route path="*" element={<Navigate to="/" replace />} />

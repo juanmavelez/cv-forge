@@ -231,7 +231,7 @@ h3 {
     justify-content: center;
     gap: 8px;
     padding: 10px 20px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     font-family: var(--font-body);
     font-size: var(--fs-sm);
     font-weight: 500;
@@ -302,7 +302,7 @@ h3 {
 
 .btn--icon {
     padding: 10px;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
 }
 
 .btn--sm {

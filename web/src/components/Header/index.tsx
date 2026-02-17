@@ -35,6 +35,7 @@ export function Header() {
             <nav className="app-header__nav">
                 <Link to="/" className="app-header__link">CVs</Link>
                 <Link to="/tracker" className="app-header__link">Tracker</Link>
+                <Link to="/components" className="app-header__link">UI Kit</Link>
             </nav>
 
             <div className="app-header__actions">
@@ -42,6 +43,6 @@ export function Header() {
                     {theme === 'dark' ? '☀️' : '🌙'}
                 </button>
             </div>
-        </header>
+        </header >
     );
 }
