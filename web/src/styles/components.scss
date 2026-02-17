@@ -59,7 +59,7 @@
         background: var(--bg-primary);
         border-radius: var(--radius);
         font-size: var(--fs-h3);
-        /* Was 1.25rem - 20px -> 20px */
+
         transition: all var(--transition);
     }
 }
@@ -68,7 +68,7 @@
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     color: var(--text-tertiary);
     font-size: var(--fs-xs);
-    /* Was 0.75rem - 12px -> 12px */
+
 }
 
 .section-card__body {
@@ -158,14 +158,14 @@
     font-family: var(--font-heading);
     font-weight: 700;
     font-size: var(--fs-h3);
-    /* Was 1.25rem - 20px -> 20px */
+
     color: var(--text-primary);
     transition: color var(--transition);
 }
 
 .cv-card__name {
     font-size: var(--fs-sm);
-    /* Was 0.9rem - 14.4px -> 14px */
+
     font-weight: 500;
     color: var(--text-secondary);
 }
@@ -177,7 +177,7 @@
     align-items: center;
     justify-content: space-between;
     font-size: var(--fs-xs);
-    /* Was 0.75rem - 12px -> 12px */
+
     font-weight: 500;
     color: var(--text-tertiary);
     border-top: 1px solid var(--border);
@@ -244,13 +244,13 @@
     font-family: var(--font-heading);
     font-weight: 600;
     font-size: var(--fs-base);
-    /* Was 1rem - 16px -> 16px */
+
     margin-bottom: 6px;
 }
 
 .timeline-item__date {
     font-size: var(--fs-xs);
-    /* Was 0.8rem - 12.8px -> 12px */
+
     font-weight: 500;
     color: var(--text-tertiary);
 }
@@ -297,7 +297,7 @@
     color: var(--text-primary);
     font-family: var(--font-body);
     font-size: var(--fs-sm);
-    /* Was 0.875rem - 14px -> 14px */
+
     font-weight: 500;
     cursor: pointer;
     border-radius: var(--radius);
@@ -360,7 +360,7 @@
     gap: 8px;
     color: var(--text-secondary);
     font-size: var(--fs-sm);
-    /* Was 0.875rem - 14px -> 14px */
+
     font-weight: 500;
     margin-bottom: 24px;
     transition: all var(--transition);
