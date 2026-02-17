@@ -14,16 +14,19 @@ export function CVPreview({ data }: CVPreviewProps) {
     const s = validateAndMergeStyle(data.style);
     const l = data.labels || defaultLabels();
 
-    const getStyle = (style: FontStyle): React.CSSProperties => {
-        if (!style) return {};
-        const color = Array.isArray(style.color) ? `rgb(${style.color.join(',')})` : 'rgb(0,0,0)';
-        return {
-            fontSize: `${style.size}pt`,
-            color,
-            fontWeight: style.bold ? 'bold' : 'normal',
-            fontStyle: style.italic ? 'italic' : 'normal',
-        };
-    };
+    const cvVars = (Object.entries(s) as [keyof typeof s, FontStyle][]).reduce(
+        (acc, [key, style]) => {
+            const color = Array.isArray(style.color) ? `rgb(${style.color.join(',')})` : style.color;
+            return {
+                ...acc,
+                [`--cv-${key}-size`]: `${style.size}pt`,
+                [`--cv-${key}-color`]: color,
+                [`--cv-${key}-weight`]: style.bold ? 'bold' : 'normal',
+                [`--cv-${key}-style`]: style.italic ? 'italic' : 'normal',
+            };
+        },
+        {} as React.CSSProperties
+    );
 
     const contactItems = [
         p.email && { icon: '✉', text: p.email, href: `mailto:${p.email}` },
@@ -52,25 +55,25 @@ export function CVPreview({ data }: CVPreviewProps) {
 
     return (
         <div className="cv-preview">
-            <div className="cv-preview__page">
+            <div className="cv-preview__page" style={cvVars}>
                 {/* Header */}
                 <header className="cv-preview__header">
                     {fullName && (
-                        <h1 className="cv-preview__name" style={getStyle(s.title1)}>
+                        <h1 className="cv-preview__name">
                             {fullName}
                         </h1>
                     )}
                     {p.title && (
-                        <p className="cv-preview__title" style={getStyle(s.title3)}>
+                        <p className="cv-preview__title">
                             {p.title}
                         </p>
                     )}
                     {contactItems.length > 0 && (
-                        <div className="cv-preview__contact" style={getStyle(s.sub)}>
+                        <div className="cv-preview__contact">
                             {contactItems.map((item, i) => (
                                 <span key={i} className="cv-preview__contact-item">
                                     {item.href ? (
-                                        <a href={item.href} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>{item.text}</a>
+                                        <a href={item.href} target="_blank" rel="noreferrer">{item.text}</a>
                                     ) : (
                                         <span>{item.text}</span>
                                     )}
@@ -84,19 +87,19 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Summary */}
                 {data.summary && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.summary}</h2>
-                        <p className="cv-preview__summary" style={getStyle(s.text2)}>{data.summary}</p>
+                        <h2 className="cv-preview__section-title">{l.summary}</h2>
+                        <p className="cv-preview__summary">{data.summary}</p>
                     </section>
                 )}
 
                 {/* Skills */}
                 {data.skills.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.skills}</h2>
+                        <h2 className="cv-preview__section-title">{l.skills}</h2>
                         {data.skills.map((sg, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <ul className="cv-preview__bullets">
-                                    <li style={getStyle(s.text2)}>
+                                    <li>
                                         {sg.category}: {sg.items.join(', ')}
                                     </li>
                                 </ul>
@@ -108,17 +111,17 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Experience */}
                 {data.experience.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.experience}</h2>
+                        <h2 className="cv-preview__section-title">{l.experience}</h2>
                         {data.experience.map((exp, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
-                                    <strong className="cv-preview__entry-title" style={getStyle(s.text1)}>
+                                    <strong className="cv-preview__entry-title">
                                         {exp.title || 'Untitled Role'}
                                         {exp.company && ` | ${exp.company}`}
                                         {exp.location && ` (${exp.location})`}
                                     </strong>
                                 </div>
-                                <div className="cv-preview__entry-dates" style={getStyle({ ...s.sub, italic: true })}>
+                                <div className="cv-preview__entry-dates">
                                     {formatDate(exp.startDate)}
                                     {(exp.startDate || exp.endDate || exp.current) && ' – '}
                                     {exp.current ? l.present : formatDate(exp.endDate)}
@@ -126,7 +129,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                                 {exp.description && (
                                     <ul className="cv-preview__bullets">
                                         {exp.description.split('\n').filter(Boolean).map((line, j) => (
-                                            <li key={j} style={getStyle(s.text2)}>
+                                            <li key={j}>
                                                 {line.replace(/^[\-•\s*·–—\-]/, '').trim()}
                                             </li>
                                         ))}
@@ -140,22 +143,24 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Education */}
                 {data.education.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.education}</h2>
+                        <h2 className="cv-preview__section-title">{l.education}</h2>
                         {data.education.map((edu, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <div className="cv-preview__entry-header">
-                                    <strong className="cv-preview__entry-title" style={getStyle(s.text1)}>
-                                        {[edu.degree, edu.field].filter(Boolean).join(' in ') || 'Untitled'}
-                                        {edu.institution && ` | ${edu.institution}`}
+                                    <strong className="cv-preview__entry-title">
+                                        {edu.institution || 'Untitled Institution'}
                                     </strong>
                                 </div>
-                                <div className="cv-preview__entry-dates" style={getStyle({ ...s.sub, italic: true })}>
+                                <div className="cv-preview__entry-dates">
                                     {formatDate(edu.startDate)}
                                     {(edu.startDate || edu.endDate) && ' – '}
                                     {formatDate(edu.endDate)}
                                 </div>
+                                <div className="cv-preview__entry-degree">
+                                    {[edu.degree, edu.field].filter(Boolean).join(' in ')}
+                                </div>
                                 {edu.description && (
-                                    <p className="cv-preview__entry-desc" style={getStyle(s.text2)}>
+                                    <p className="cv-preview__entry-desc">
                                         {edu.description}
                                     </p>
                                 )}
@@ -167,11 +172,11 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Languages */}
                 {data.languages.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.languages}</h2>
+                        <h2 className="cv-preview__section-title">{l.languages}</h2>
                         {data.languages.map((lang, i) => (
                             <div key={i} className="cv-preview__entry">
                                 <ul className="cv-preview__bullets">
-                                    <li style={getStyle(s.text2)}>
+                                    <li>
                                         {lang.language}
                                         {lang.proficiency && `: ${lang.proficiency}`}
                                     </li>
@@ -184,13 +189,13 @@ export function CVPreview({ data }: CVPreviewProps) {
                 {/* Certifications */}
                 {data.certifications.length > 0 && (
                     <section className="cv-preview__section">
-                        <h2 className="cv-preview__section-title" style={getStyle(s.title2)}>{l.certifications}</h2>
+                        <h2 className="cv-preview__section-title">{l.certifications}</h2>
                         {data.certifications.map((cert, i) => (
                             <div key={i} className="cv-preview__entry cv-preview__entry--compact">
                                 <div className="cv-preview__entry-header">
-                                    <strong className="cv-preview__entry-title" style={getStyle(s.text1)}>
+                                    <strong className="cv-preview__entry-title">
                                         {cert.url ? (
-                                            <a href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
+                                            <a href={cert.url.startsWith('http') ? cert.url : `https://${cert.url}`} target="_blank" rel="noreferrer">
                                                 {cert.name || 'Untitled'}
                                             </a>
                                         ) : (
@@ -200,7 +205,7 @@ export function CVPreview({ data }: CVPreviewProps) {
                                     </strong>
                                 </div>
                                 {cert.date && (
-                                    <div className="cv-preview__entry-dates" style={getStyle(s.sub)}>
+                                    <div className="cv-preview__entry-dates">
                                         {formatDate(cert.date)}
                                     </div>
                                 )}
