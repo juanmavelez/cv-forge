@@ -1,4 +1,4 @@
-import type { CV, CVData, CVVersion, CVExport } from './types';
+import type { CV, CVData, CVVersion, CVExport } from '../types';
 
 const BASE = '/api';
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { api } from '../../api';
-import { applicationsApi } from '../../api/applications';
+import { api, applicationsApi } from '../../api';
 import { Application, CV } from '../../types';
 import { useToast } from '../../components/Toast';
 import { ApplicationForm } from './components/ApplicationForm';

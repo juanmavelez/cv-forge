@@ -1,9 +1,9 @@
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Header } from './components/Header/index';
-import { ToastProvider } from './components/Toast/index';
-import { ModalProvider } from './components/Modal/index';
+import { Header } from './components/Header';
+import { ToastProvider } from './components/Toast';
+import { ModalProvider } from './components/Modal';
 import { Dashboard } from './pages/Dashboard';
-import { Editor } from './pages/Editor/index';
+import { Editor } from './pages/Editor';
 import { History } from './pages/History';
 import { JobTracker } from './pages/JobTracker';
 import { ApplicationEditor } from './pages/JobTracker/ApplicationEditor';

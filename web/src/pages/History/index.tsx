@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { api } from '../api';
-import { useToast } from '../components/Toast/index';
-import { useModal } from '../components/Modal/index';
-import type { CVVersion, CVData } from '../types';
+import { api } from '../../api';
+import { useToast } from '../../components/Toast/index';
+import { useModal } from '../../components/Modal/index';
+import type { CVVersion, CVData } from '../../types';
 import './History.scss';
 
 export function History() {

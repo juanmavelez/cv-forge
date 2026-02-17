@@ -18,9 +18,9 @@ This document is intended for developers and AI agents working on the CV Forge p
 │   └── ...
 ├── web/
 │   ├── src/
-│   │   ├── api/        # TypeScript API clients (fetch wrappers)
+│   │   ├── api/        # Modular API clients (index.ts, cv.ts, applications.ts)
 │   │   ├── components/ # Reusable UI components
-│   │   ├── pages/      # Route-level components
+│   │   ├── pages/      # Route-level components (Dashboard/, History/, JobTracker/)
 │   │   ├── styles/     # Global SCSS (variables, mixins, reset)
 │   │   └── types.ts    # Shared TypeScript interfaces
 │   └── index.html      # Entry HTML

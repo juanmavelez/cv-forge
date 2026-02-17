@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../api';
-import { useToast } from '../components/Toast/index';
-import { useModal } from '../components/Modal/index';
-import { emptyCVData } from '../types';
-import type { CV, CVExport } from '../types';
+import { api } from '../../api';
+import { useToast } from '../../components/Toast/index';
+import { useModal } from '../../components/Modal/index';
+import { emptyCVData } from '../../types';
+import type { CV, CVExport } from '../../types';
 
 export function Dashboard() {
     const [cvs, setCvs] = useState<CV[]>([]);

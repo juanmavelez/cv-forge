@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { applicationsApi } from '../../api/applications';
+import { applicationsApi } from '../../api';
 import { Application } from '../../types';
 import { useToast } from '../../components/Toast';
 import { useModal } from '../../components/Modal';
