@@ -60,7 +60,8 @@ export function ApplicationEditor() {
                 </div>
             </header>
 
-            <div className="card card--centered">
+            <div className="card">
+
                 <ApplicationForm
                     initialData={application}
                     onSubmit={handleSubmit}
