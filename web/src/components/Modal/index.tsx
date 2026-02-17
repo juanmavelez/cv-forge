@@ -75,7 +75,7 @@ function ModalOverlay({ modal, close }: { modal: ModalState; close: (v: string |
                 <h3 className="modal__title">{modal.title}</h3>
 
                 {modal.type === 'confirm' && (
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{modal.message}</p>
+                    <p className="modal__description">{modal.message}</p>
                 )}
 
                 {modal.type === 'prompt' && (

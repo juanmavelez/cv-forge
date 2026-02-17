@@ -1,0 +1,26 @@
+/* === History Page === */
+.history-cv-title {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.history-json-preview {
+    max-height: 400px;
+    overflow: auto;
+    font-size: 0.8125rem;
+    font-family: var(--font-body);
+    background: var(--bg-tertiary);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    white-space: pre-wrap;
+    word-break: break-all;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+}
+
+.modal--history {
+    max-width: 700px;
+    width: 90%;
+}

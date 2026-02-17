@@ -4,6 +4,7 @@ import { api } from '../api';
 import { useToast } from '../components/Toast/index';
 import { useModal } from '../components/Modal/index';
 import type { CVVersion, CVData } from '../types';
+import './History.scss';
 
 export function History() {
     const { id } = useParams<{ id: string }>();
@@ -65,7 +66,7 @@ export function History() {
             <div className="page-title">
                 <h1>🕐 Version History</h1>
             </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>{cvTitle}</p>
+            <p className="history-cv-title">{cvTitle}</p>
 
             {versions.length === 0 ? (
                 <div className="empty-state">
@@ -96,13 +97,9 @@ export function History() {
             {/* View modal */}
             {viewData && (
                 <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setViewData(null)}>
-                    <div className="modal" style={{ maxWidth: 600 }}>
+                    <div className="modal modal--history">
                         <h3 className="modal__title">Version: {viewData.message}</h3>
-                        <pre style={{
-                            maxHeight: 400, overflow: 'auto', fontSize: '0.75rem',
-                            background: 'var(--bg-tertiary)', padding: 12, borderRadius: 'var(--radius-sm)',
-                            whiteSpace: 'pre-wrap', wordBreak: 'break-all',
-                        }}>
+                        <pre className="history-json-preview">
                             {JSON.stringify(viewData.data, null, 2)}
                         </pre>
                         <div className="modal__actions">

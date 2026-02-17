@@ -52,13 +52,12 @@ function StyleConfigEntry({ value, onChange }: {
     };
 
     const ColorPicker = ({ label, color, onChange }: { label: string, color: [number, number, number], onChange: (c: [number, number, number]) => void }) => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--text-secondary)' }}>{label}</label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="color-picker">
+            <label className="color-picker__label">{label}</label>
+            <div className="color-picker__input-wrapper">
                 <input
-                    className="form-input"
+                    className="form-input color-picker__input"
                     type="color"
-                    style={{ width: '100%', padding: '2px', height: '36px' }}
                     value={toHex(color)}
                     onChange={e => onChange(fromHex(e.target.value))}
                 />
@@ -69,16 +68,16 @@ function StyleConfigEntry({ value, onChange }: {
     return (
         <div className="style-config">
             <div className="form-group">
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>Colors</h4>
+                <h4 className="style-config__section-title">Colors</h4>
 
-                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-secondary)' }}>Titles & Headings</h5>
+                <h5 className="style-config__subsection-title">Titles & Headings</h5>
                 <div className="form-row--3">
                     <ColorPicker label="Name" color={value.title1.color} onChange={c => updateStyle('title1', c)} />
                     <ColorPicker label="Prof. Title" color={value.title3.color} onChange={c => updateStyle('title3', c)} />
                     <ColorPicker label="Section Headers" color={value.title2.color} onChange={c => updateStyle('title2', c)} />
                 </div>
 
-                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginTop: '12px', marginBottom: '8px', color: 'var(--text-secondary)' }}>Content</h5>
+                <h5 className="style-config__subsection-title style-config__subsection-title--mt">Content</h5>
                 <div className="form-row--3">
                     <ColorPicker label="Job/Degree" color={value.text1.color} onChange={c => updateStyle('text1', c)} />
                     <ColorPicker label="Body Text" color={value.text2.color} onChange={c => updateStyle('text2', c)} />
@@ -86,10 +85,10 @@ function StyleConfigEntry({ value, onChange }: {
                 </div>
             </div>
 
-            <div className="form-group" style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '16px', color: 'var(--text-primary)' }}>Typography (Sizes in pt)</h4>
+            <div className="form-group style-config__typography-group">
+                <h4 className="style-config__section-title">Typography (Sizes in pt)</h4>
 
-                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px', color: 'var(--text-secondary)' }}>Titles & Headings</h5>
+                <h5 className="style-config__subsection-title">Titles & Headings</h5>
                 <div className="form-row--3">
                     <FormInput
                         label="Name"
@@ -111,7 +110,7 @@ function StyleConfigEntry({ value, onChange }: {
                     />
                 </div>
 
-                <h5 style={{ fontSize: '0.85rem', fontWeight: 600, marginTop: '12px', marginBottom: '8px', color: 'var(--text-secondary)' }}>Content</h5>
+                <h5 className="style-config__subsection-title style-config__subsection-title--mt">Content</h5>
                 <div className="form-row--3">
                     <FormInput
                         label="Job/Degree"
@@ -134,7 +133,7 @@ function StyleConfigEntry({ value, onChange }: {
                 </div>
             </div>
 
-            <button className="btn btn--secondary btn--sm" onClick={() => onChange(defaultStyle())} style={{ marginTop: '16px' }}>
+            <button className="btn btn--secondary btn--sm btn--mt" onClick={() => onChange(defaultStyle())}>
                 Reset Styles to Defaults
             </button>
         </div >

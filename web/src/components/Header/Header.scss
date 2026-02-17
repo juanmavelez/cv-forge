@@ -3,61 +3,82 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    height: 60px;
+    background: var(--glass-bg);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0 40px;
+    height: 72px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    backdrop-filter: blur(12px);
-    transition: background var(--transition), border-color var(--transition);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    transition: all var(--transition);
+
+    &--scrolled {
+        height: 64px;
+        box-shadow: var(--shadow-sm);
+    }
 }
 
 .app-header__brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: var(--text-primary);
+    letter-spacing: -0.02em;
     cursor: pointer;
     user-select: none;
 
     svg {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
+        color: var(--accent);
+        filter: drop-shadow(0 0 8px var(--accent-light));
     }
 }
 
 .app-header__actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 /* === Theme Toggle === */
 .theme-toggle {
-    background: none;
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 7px 9px;
-    border-radius: var(--radius-sm);
-    font-size: 1.1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    font-size: 1.25rem;
     transition: all var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-sm);
 
     &:hover {
         background: var(--bg-hover);
         color: var(--text-primary);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    &:active {
+        transform: translateY(0);
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .app-header {
-        padding: 0 16px;
+        padding: 0 20px;
+        height: 64px;
     }
 }

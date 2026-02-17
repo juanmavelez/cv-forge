@@ -100,8 +100,7 @@ export function Editor() {
                     {/* Title input */}
                     <div className="form-group">
                         <input
-                            className="form-input"
-                            style={{ fontSize: '1.5rem', fontWeight: 700, border: 'none', padding: '8px 0', background: 'transparent' }}
+                            className="editor-cv-title"
                             value={title}
                             onChange={e => updateTitle(e.target.value)}
                             placeholder="CV Title"
@@ -250,15 +249,14 @@ export function Editor() {
             {/* Action bar */}
             <div className="action-bar">
                 <div className="action-bar__left">
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+                    <span className="save-status">
                         {saving ? '⏳ Saving…' : '✓ Saved'}
                     </span>
                 </div>
                 <div className="action-bar__right">
                     <button
-                        className={`btn btn--secondary btn--sm${editMode === 'settings' ? ' btn--primary' : ''}`}
+                        className={`btn btn--sm ${editMode === 'settings' ? 'btn--primary' : 'btn--secondary'}`}
                         onClick={() => setEditMode(m => m === 'content' ? 'settings' : 'content')}
-                        style={editMode === 'settings' ? { background: 'var(--accent)', color: 'white', borderColor: 'var(--accent)' } : {}}
                     >
                         ⚙️ Settings
                     </button>

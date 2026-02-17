@@ -12,8 +12,65 @@
 
 .cv-settings__description {
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     margin-bottom: 32px;
+    line-height: 1.5;
+}
+
+.style-config__section-title {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.style-config__subsection-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &--mt {
+        margin-top: 16px;
+    }
+}
+
+.style-config__typography-group {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+}
+
+.color-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.color-picker__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.color-picker__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.color-picker__input {
+    width: 100% !important;
+    padding: 2px !important;
+    height: 40px !important;
+    cursor: pointer;
+}
+
+.btn--mt {
+    margin-top: 32px;
 }
 
 .cv-settings__group {

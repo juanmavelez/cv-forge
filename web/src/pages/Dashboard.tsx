@@ -76,9 +76,9 @@ export function Dashboard() {
     return (
         <div className="container container--wide">
             <div className="page-title">
-                <h1>📄 My CVs</h1>
-                <div style={{ display: 'flex', gap: 8 }}>
-                    <button className="btn btn--primary" onClick={handleNewCV}>+ New CV</button>
+                <h1>My CVs</h1>
+                <div className="page-title__actions">
+                    <button className="btn btn--primary btn--rounded" onClick={handleNewCV}>✨ New CV</button>
                     <button className="btn btn--secondary" onClick={handleImport}>↑ Import JSON</button>
                 </div>
             </div>
