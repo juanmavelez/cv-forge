@@ -1,0 +1,48 @@
+@media print {
+    @page {
+        margin: 0;
+        size: auto;
+    }
+
+    body {
+        background: white;
+    }
+
+    /* Hide everything by default */
+    body>* {
+        display: none !important;
+    }
+
+    /* Only show the print layout */
+    .print-layout {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: white;
+
+        /* Ensure CV Preview styles work correctly in print */
+        .cv-preview {
+            padding: 0;
+            background: white;
+            min-height: auto;
+        }
+
+        .cv-preview__page {
+            box-shadow: none;
+            margin: 0;
+            width: 100%;
+            max-width: none;
+            border: none;
+            min-height: 100vh;
+        }
+    }
+}
+
+/* Hide print layout in normal view */
+.print-layout {
+    display: none;
+}

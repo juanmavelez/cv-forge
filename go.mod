@@ -4,7 +4,6 @@ go 1.25.7
 
 require (
 	github.com/go-chi/chi/v5 v5.2.5
-	github.com/go-pdf/fpdf v0.9.0
 	github.com/google/uuid v1.6.0
 	modernc.org/sqlite v1.45.0
 )

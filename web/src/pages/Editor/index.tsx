@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useReactToPrint } from 'react-to-print';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 import { useToast } from '../../components/Toast/index';
@@ -8,6 +9,9 @@ import { CVSettings } from '../../components/CVSettings/index';
 import { SectionCard } from '../../components/SectionCard/index';
 import { FormInput } from '../../components/FormInput/index';
 import { ExperienceEntry, EducationEntry, SkillGroupEntry, LanguageEntry, CertificationEntry } from './components/EditorEntries';
+import { saveAs } from 'file-saver';
+import { generateDOCX } from '../../utils/docx';
+import { PrintLayout } from '../../components/PrintLayout';
 import type { CVData, Experience, Education, SkillGroup, Language, Certification } from '../../types';
 
 // Debounce timer ref
@@ -18,6 +22,7 @@ export function Editor() {
     const navigate = useNavigate();
     const toast = useToast();
     const { prompt } = useModal();
+    const printRef = useRef<HTMLDivElement>(null);
 
     const [title, setTitle] = useState('');
     const [data, setData] = useState<CVData | null>(null);
@@ -78,13 +83,32 @@ export function Editor() {
     };
 
     const handleSaveVersion = async () => {
-        const message = await prompt('Save Version', 'Version Message', `Snapshot ${new Date().toLocaleDateString()}`);
-        if (message === null || !id) return;
+        if (!id) return;
+        const msg = await prompt('Save Version', 'Enter a label for this snapshot (e.g. "Draft 1")');
+        if (msg === null) return;
         try {
-            await api.createVersion(id, message);
+            await api.createVersion(id, msg);
             toast('Version saved!', 'success');
         } catch (err) {
-            toast(`Failed to save version: ${err}`, 'error');
+            toast(`Save failed: ${err}`, 'error');
+        }
+    };
+
+    const handlePrint = useReactToPrint({
+        contentRef: printRef,
+        documentTitle: title || 'CV',
+    });
+
+    const handleExportDOCX = async () => {
+        if (!data) return;
+        try {
+            toast('Generating DOCX...', 'info');
+            const blob = await generateDOCX(data);
+            saveAs(blob, `${title || 'CV'}.docx`);
+            toast('DOCX downloaded!', 'success');
+        } catch (err) {
+            console.error(err);
+            toast('DOCX export failed', 'error');
         }
     };
 
@@ -278,8 +302,8 @@ export function Editor() {
                         </button>
                         {showExport && id && (
                             <div className="dropdown__menu" onClick={() => setShowExport(false)}>
-                                <a className="dropdown__item" href={api.exportPDFUrl(id)} target="_blank" rel="noreferrer">📄 PDF</a>
-                                <a className="dropdown__item" href={api.exportDOCXUrl(id)} target="_blank" rel="noreferrer">📝 DOCX</a>
+                                <button className="dropdown__item" onClick={() => handlePrint()}>🖨️ Print / Save PDF</button>
+                                <button className="dropdown__item" onClick={handleExportDOCX}>📝 DOCX</button>
                                 <div className="dropdown__divider" />
                                 <a className="dropdown__item" href={api.exportJSONUrl(id)} target="_blank" rel="noreferrer">📋 JSON</a>
                             </div>
@@ -287,6 +311,8 @@ export function Editor() {
                     </div>
                 </div>
             </div>
+            {/* Hidden Print Layout */}
+            {data && <PrintLayout ref={printRef} data={data} title={title} />}
         </>
     );
 }

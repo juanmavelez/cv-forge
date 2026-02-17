@@ -49,6 +49,15 @@ export const api = {
     exportDOCXUrl: (id: string) => `${BASE}/cvs/${id}/export/docx`,
     exportJSONUrl: (id: string) => `${BASE}/cvs/${id}/export/json`,
 
+    exportPDFLive: async (id: string, title: string, data: CVData): Promise<Blob> => {
+        const res = await fetch(`${BASE}/cvs/${id}/export/pdf`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, data }),
+        });
+        if (!res.ok) throw new Error('Live export failed');
+        return res.blob();
+    },
 
     importCV: (data: CVExport) =>
         request<CV>('/cvs/import', { method: 'POST', body: JSON.stringify(data) }),

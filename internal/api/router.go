@@ -35,8 +35,7 @@ func NewRouter(database *db.DB, staticFS http.FileSystem) *chi.Mux {
 			r.Delete("/", h.deleteCV)
 
 			// Export
-			r.Get("/export/pdf", h.exportPDF)
-			r.Get("/export/docx", h.exportDOCX)
+			// Export
 			r.Get("/export/json", h.exportJSON)
 
 			// Versions
