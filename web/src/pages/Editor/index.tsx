@@ -140,17 +140,17 @@ export function Editor() {
                                 isOpen={!!openSections.personal}
                                 onToggle={() => toggleSection('personal')}
                             >
-                                <div className="form-row">
+                                <div className="form-grid" data-cols="2">
                                     <FormInput label="First Name" value={p.firstName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, firstName: v } }))} />
                                     <FormInput label="Last Name" value={p.lastName} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, lastName: v } }))} />
                                 </div>
                                 <FormInput label="Professional Title" value={p.title} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, title: v } }))} placeholder="e.g. Frontend Engineer" />
-                                <div className="form-row">
+                                <div className="form-grid" data-cols="2">
                                     <FormInput label="Email" value={p.email} type="email" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, email: v } }))} />
                                     <FormInput label="Phone" value={p.phone} type="tel" onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, phone: v } }))} />
                                 </div>
                                 <FormInput label="Location" value={p.location} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, location: v } }))} />
-                                <div className="form-row">
+                                <div className="form-grid" data-cols="2">
                                     <FormInput label="LinkedIn" value={p.linkedin} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, linkedin: v } }))} />
                                     <FormInput label="Website" value={p.website} onChange={v => updateData(d => ({ ...d, personal: { ...d.personal, website: v } }))} />
                                 </div>

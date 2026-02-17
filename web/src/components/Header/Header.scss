@@ -27,8 +27,10 @@
     text-decoration: none;
     color: inherit;
     font-family: var(--font-heading);
+    font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: var(--fs-h2);
+    /* Was 1.4rem - 22.4px -> 24px */
     color: var(--text-primary);
     letter-spacing: -0.02em;
     cursor: pointer;
@@ -57,7 +59,8 @@
     width: 40px;
     height: 40px;
     border-radius: var(--radius-md);
-    font-size: 1.25rem;
+    font-size: var(--fs-h3);
+    /* Was 1.25rem - 20px -> 20px */
     transition: all var(--transition);
     display: flex;
     align-items: center;

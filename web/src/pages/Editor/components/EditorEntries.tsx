@@ -12,12 +12,12 @@ export function ExperienceEntry({ index, entry, onChange, onRemove }: {
                 <span className="entry__number">Experience #{index + 1}</span>
                 <button className="entry__remove" onClick={onRemove}>✕ Remove</button>
             </div>
-            <div className="form-row">
+            <div className="form-grid" data-cols="2">
                 <FormInput label="Title" value={entry.title} onChange={v => up({ title: v })} />
                 <FormInput label="Company" value={entry.company} onChange={v => up({ company: v })} />
             </div>
             <FormInput label="Location" value={entry.location} onChange={v => up({ location: v })} />
-            <div className="form-row--3">
+            <div className="form-grid" data-cols="3">
                 <FormInput label="Start Date" value={entry.startDate} type="month" onChange={v => up({ startDate: v })} />
                 <FormInput label="End Date" value={entry.endDate} type="month" onChange={v => up({ endDate: v })} />
                 <div className="form-group form-group--align-end">

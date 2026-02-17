@@ -71,14 +71,14 @@ function StyleConfigEntry({ value, onChange }: {
                 <h4 className="style-config__section-title">Colors</h4>
 
                 <h5 className="style-config__subsection-title">Titles & Headings</h5>
-                <div className="form-row--3">
+                <div className="form-grid" data-cols="3">
                     <ColorPicker label="Name" color={value.title1.color} onChange={c => updateStyle('title1', c)} />
                     <ColorPicker label="Prof. Title" color={value.title3.color} onChange={c => updateStyle('title3', c)} />
                     <ColorPicker label="Section Headers" color={value.title2.color} onChange={c => updateStyle('title2', c)} />
                 </div>
 
                 <h5 className="style-config__subsection-title style-config__subsection-title--mt">Content</h5>
-                <div className="form-row--3">
+                <div className="form-grid" data-cols="3">
                     <ColorPicker label="Job/Degree" color={value.text1.color} onChange={c => updateStyle('text1', c)} />
                     <ColorPicker label="Body Text" color={value.text2.color} onChange={c => updateStyle('text2', c)} />
                     <ColorPicker label="Metadata" color={value.sub.color} onChange={c => updateStyle('sub', c)} />
@@ -89,7 +89,7 @@ function StyleConfigEntry({ value, onChange }: {
                 <h4 className="style-config__section-title">Typography (Sizes in pt)</h4>
 
                 <h5 className="style-config__subsection-title">Titles & Headings</h5>
-                <div className="form-row--3">
+                <div className="form-grid" data-cols="3">
                     <FormInput
                         label="Name"
                         type="number"
@@ -111,7 +111,7 @@ function StyleConfigEntry({ value, onChange }: {
                 </div>
 
                 <h5 className="style-config__subsection-title style-config__subsection-title--mt">Content</h5>
-                <div className="form-row--3">
+                <div className="form-grid" data-cols="3">
                     <FormInput
                         label="Job/Degree"
                         type="number"

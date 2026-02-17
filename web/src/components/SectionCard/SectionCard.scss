@@ -31,18 +31,19 @@
     align-items: center;
     gap: 10px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--fs-base);
     color: var(--text-primary);
 
     .icon {
-        font-size: 1.1rem;
+        font-size: var(--fs-lg);
     }
 }
 
 .section-card__chevron {
     transition: transform var(--transition);
     color: var(--text-tertiary);
-    font-size: 0.8rem;
+    font-size: var(--fs-xs);
+    /* Was 0.8rem - 12.8px -> 12px */
 }
 
 .section-card__body {
