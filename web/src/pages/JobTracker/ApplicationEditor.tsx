@@ -60,7 +60,7 @@ export function ApplicationEditor() {
                 </div>
             </header>
 
-            <div className="card" style={{ maxWidth: '800px', margin: '0 auto', padding: '32px' }}>
+            <div className="card card--centered">
                 <ApplicationForm
                     initialData={application}
                     onSubmit={handleSubmit}

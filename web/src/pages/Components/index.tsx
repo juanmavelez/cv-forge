@@ -1,6 +1,7 @@
 import '../../styles/main.scss';
 import '../../styles/forms.scss';
 import '../../styles/components.scss';
+import './Components.scss';
 
 export function ComponentsPage() {
     return (
@@ -9,74 +10,75 @@ export function ComponentsPage() {
                 <h1>
                     <span>🎨</span> Components System
                 </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
+                <p className="text-secondary">
                     Visual reference for the design system and UI components.
                 </p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
+            <div className="components-sections">
 
                 {/* Typography Section */}
                 <section>
-                    <h2 style={{ marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+                    <h2 className="components-section__title">
                         Typography
                     </h2>
-                    <div style={{ display: 'grid', gap: '24px' }}>
+                    <div className="components-grid">
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Display (3rem)</div>
-                            <h1 style={{ fontSize: 'var(--fs-display)', margin: 0 }}>The quick brown fox</h1>
+                            <div className="components-demo-item__label">Display (3rem)</div>
+                            <h1 className="components-demo-item__content--h1">The quick brown fox</h1>
+
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>H1 (2rem)</div>
+                            <div className="components-demo-item__label">H1 (2rem)</div>
                             <h1>Heading level 1</h1>
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>H2 (1.5rem)</div>
+                            <div className="components-demo-item__label">H2 (1.5rem)</div>
                             <h2>Heading level 2</h2>
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>H3 (1.25rem)</div>
+                            <div className="components-demo-item__label">H3 (1.25rem)</div>
                             <h3>Heading level 3</h3>
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Body (1rem)</div>
+                            <div className="components-demo-item__label">Body (1rem)</div>
                             <p>Body text. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita, qui.</p>
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>Small (0.875rem)</div>
-                            <p style={{ fontSize: 'var(--fs-sm)' }}>Small text for metadata and captions.</p>
+                            <div className="components-demo-item__label">Small (0.875rem)</div>
+                            <p className="components-demo-item__content--small">Small text for metadata and captions.</p>
                         </div>
                         <div>
-                            <div style={{ fontSize: '12px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>XS (0.75rem)</div>
-                            <p style={{ fontSize: 'var(--fs-xs)' }}>Extra small text for fine print.</p>
+                            <div className="components-demo-item__label">XS (0.75rem)</div>
+                            <p className="components-demo-item__content--xs">Extra small text for fine print.</p>
                         </div>
                     </div>
                 </section>
 
                 {/* Buttons Section */}
                 <section>
-                    <h2 style={{ marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+                    <h2 className="components-section__title">
                         Buttons
                     </h2>
-                    <div style={{ display: 'grid', gap: '24px' }}>
+                    <div className="components-grid">
 
                         {/* Variants */}
                         <div>
-                            <h3 style={{ fontSize: '1rem', marginBottom: '16px', color: 'var(--text-secondary)' }}>Variants</h3>
-                            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+                            <h3 className="components-subheading">Variants</h3>
+                            <div className="components-flex-row">
                                 <button className="btn btn--primary">Primary Button</button>
                                 <button className="btn btn--secondary">Secondary Button</button>
                                 <button className="btn btn--ghost">Ghost Button</button>
                             </div>
-                            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center', marginTop: '16px' }}>
+                            <div className="components-flex-row components-flex-row--margin-top">
                                 <button className="btn btn--danger">Danger Button</button>
                             </div>
                         </div>
 
                         {/* Sizes & Shapes */}
                         <div>
-                            <h3 style={{ fontSize: '1rem', marginBottom: '16px', color: 'var(--text-secondary)' }}>Sizes & Shapes</h3>
-                            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+                            <h3 className="components-subheading">Sizes & Shapes</h3>
+                            <div className="components-flex-row">
                                 <button className="btn btn--primary btn--sm">Small Button</button>
                                 <button className="btn btn--primary">Default Button</button>
                                 <button className="btn btn--primary btn--rounded">Rounded Button</button>
@@ -90,8 +92,8 @@ export function ComponentsPage() {
 
                         {/* States */}
                         <div>
-                            <h3 style={{ fontSize: '1rem', marginBottom: '16px', color: 'var(--text-secondary)' }}>States (Disabled)</h3>
-                            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                            <h3 className="components-subheading">States (Disabled)</h3>
+                            <div className="components-flex-row">
                                 <button className="btn btn--primary" disabled>Primary</button>
                                 <button className="btn btn--secondary" disabled>Secondary</button>
                             </div>
@@ -102,10 +104,10 @@ export function ComponentsPage() {
 
                 {/* Forms Section */}
                 <section>
-                    <h2 style={{ marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+                    <h2 className="components-section__title">
                         Form Elements
                     </h2>
-                    <div className="form-grid" style={{ maxWidth: '600px' }}>
+                    <div className="form-grid components-grid--form">
                         <div className="form-group">
                             <label>Text Input</label>
                             <input type="text" className="form-input" placeholder="Placeholder text..." />
@@ -129,15 +131,15 @@ export function ComponentsPage() {
                         </div>
                         <div className="form-group">
                             <label>Invalid State (Simulated)</label>
-                            <input type="text" className="form-input" style={{ borderColor: 'var(--danger)' }} defaultValue="Invalid value" />
-                            <span style={{ color: 'var(--danger)', fontSize: 'var(--fs-xs)', marginTop: '4px', display: 'block' }}>Error message here</span>
+                            <input type="text" className="form-input form-input--danger" defaultValue="Invalid value" />
+                            <span className="text-danger fs-xs mt-1 block">Error message here</span>
                         </div>
                     </div>
                 </section>
 
                 {/* Cards Section */}
                 <section>
-                    <h2 style={{ marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+                    <h2 className="components-section__title">
                         Cards
                     </h2>
                     <div className="cv-grid">
@@ -161,7 +163,7 @@ export function ComponentsPage() {
 
                     </div>
 
-                    <div style={{ marginTop: '24px', maxWidth: '600px' }}>
+                    <div className="components-card-wrapper">
                         {/* Section Card Example */}
                         <div className="section-card">
                             <div className="section-card__header">
@@ -172,7 +174,7 @@ export function ComponentsPage() {
                                 <div className="section-card__chevron">▼</div>
                             </div>
                             <div className="section-card__body">
-                                <p style={{ color: 'var(--text-secondary)' }}>Content goes here...</p>
+                                <p className="text-secondary">Content goes here...</p>
                             </div>
                         </div>
                     </div>
@@ -180,33 +182,33 @@ export function ComponentsPage() {
 
                 {/* Color Palette Section */}
                 <section>
-                    <h2 style={{ marginBottom: '24px', borderBottom: '1px solid var(--border)', paddingBottom: '12px' }}>
+                    <h2 className="components-section__title">
                         Colors
                     </h2>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '16px' }}>
+                    <div className="components-color-grid">
 
-                        <div style={{ padding: '16px', borderRadius: 'var(--radius)', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-                            <div style={{ height: '40px', background: 'var(--accent)', borderRadius: 'var(--radius)', marginBottom: '8px' }}></div>
-                            <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600 }}>Accent</div>
-                            <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>--accent</div>
+                        <div className="components-color-card">
+                            <div className="components-color-card__sample components-color-card__sample--accent"></div>
+                            <div className="components-color-card__name">Accent</div>
+                            <div className="components-color-card__value">--accent</div>
                         </div>
 
-                        <div style={{ padding: '16px', borderRadius: 'var(--radius)', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-                            <div style={{ height: '40px', background: 'var(--text-primary)', borderRadius: 'var(--radius)', marginBottom: '8px' }}></div>
-                            <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600 }}>Text Primary</div>
-                            <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>--text-primary</div>
+                        <div className="components-color-card">
+                            <div className="components-color-card__sample components-color-card__sample--text-primary"></div>
+                            <div className="components-color-card__name">Text Primary</div>
+                            <div className="components-color-card__value">--text-primary</div>
                         </div>
 
-                        <div style={{ padding: '16px', borderRadius: 'var(--radius)', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-                            <div style={{ height: '40px', background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', marginBottom: '8px' }}></div>
-                            <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600 }}>Background Secondary</div>
-                            <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>--bg-secondary</div>
+                        <div className="components-color-card">
+                            <div className="components-color-card__sample components-color-card__sample--bg-secondary"></div>
+                            <div className="components-color-card__name">Background Secondary</div>
+                            <div className="components-color-card__value">--bg-secondary</div>
                         </div>
 
-                        <div style={{ padding: '16px', borderRadius: 'var(--radius)', background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>
-                            <div style={{ height: '40px', background: 'var(--danger)', borderRadius: 'var(--radius)', marginBottom: '8px' }}></div>
-                            <div style={{ fontSize: 'var(--fs-xs)', fontWeight: 600 }}>Danger</div>
-                            <div style={{ fontSize: 'var(--fs-xs)', color: 'var(--text-tertiary)' }}>--danger</div>
+                        <div className="components-color-card">
+                            <div className="components-color-card__sample components-color-card__sample--danger"></div>
+                            <div className="components-color-card__name">Danger</div>
+                            <div className="components-color-card__value">--danger</div>
                         </div>
 
                     </div>

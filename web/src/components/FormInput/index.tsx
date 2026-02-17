@@ -4,12 +4,12 @@ interface FormInputProps {
     onChange: (v: string) => void;
     type?: string;
     placeholder?: string;
-    style?: React.CSSProperties;
 }
 
-export function FormInput({ label, value, onChange, type = 'text', placeholder, style }: FormInputProps) {
+export function FormInput({ label, value, onChange, type = 'text', placeholder }: FormInputProps) {
     return (
-        <div className="form-group" style={style}>
+        <div className="form-group">
+
             <label>{label}</label>
             <input
                 className="form-input"

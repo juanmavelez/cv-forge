@@ -1,5 +1,4 @@
 import { Application, ApplicationStatus } from '../../../types';
-import { getStatusColor } from '../utils';
 
 interface ApplicationListProps {
     applications: Application[];
@@ -19,16 +18,10 @@ export function ApplicationList({ applications, onEdit, onDelete }: ApplicationL
     }
 
     const getStatusBadge = (status: ApplicationStatus) => {
-        const s = getStatusColor(status);
+        const statusClass = status.toLowerCase().replace(/\s+/g, '-');
 
         return (
-            <span style={{
-                padding: '4px 8px',
-                borderRadius: '999px',
-                fontSize: '12px',
-                fontWeight: 600,
-                ...s
-            }}>
+            <span className={`status-badge status-badge--${statusClass}`}>
                 {status}
             </span>
         );
@@ -43,7 +36,7 @@ export function ApplicationList({ applications, onEdit, onDelete }: ApplicationL
                         <th>Role</th>
                         <th>Status</th>
                         <th>Date Applied</th>
-                        <th style={{ textAlign: 'right' }}>Actions</th>
+                        <th className="text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +52,7 @@ export function ApplicationList({ applications, onEdit, onDelete }: ApplicationL
                             </td>
                             <td>{getStatusBadge(app.status)}</td>
                             <td>{new Date(app.date).toLocaleDateString()}</td>
-                            <td style={{ textAlign: 'right' }}>
+                            <td className="text-right">
                                 <div className="action-buttons">
                                     <button
                                         onClick={() => onEdit(app)}

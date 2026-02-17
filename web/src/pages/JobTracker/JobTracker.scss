@@ -162,3 +162,41 @@
     padding-top: 24px;
     border-top: 1px solid var(--border);
 }
+
+.card--centered {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+
+    &--applied {
+        background: #e0f2fe;
+        color: #0369a1;
+    }
+
+    &--interviewing {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    &--offer {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    &--rejected {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    &--default {
+        background: #f3f4f6;
+        color: #374151;
+    }
+}

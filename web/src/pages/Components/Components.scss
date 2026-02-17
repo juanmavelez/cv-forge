@@ -1,0 +1,113 @@
+.components-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.components-section {
+    &__title {
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+    }
+}
+
+.components-grid {
+    display: grid;
+    gap: 24px;
+
+    &--form {
+        max-width: 600px;
+    }
+}
+
+.components-demo-item {
+    &__label {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        margin-bottom: 4px;
+    }
+
+    &__content {
+        &--h1 {
+            font-size: var(--fs-display);
+            margin: 0;
+        }
+
+        &--small {
+            font-size: var(--fs-sm);
+        }
+
+        &--xs {
+            font-size: var(--fs-xs);
+        }
+    }
+}
+
+.components-subheading {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+}
+
+.components-flex-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+
+    &--margin-top {
+        margin-top: 16px;
+    }
+}
+
+.components-card-wrapper {
+    margin-top: 24px;
+    max-width: 600px;
+}
+
+.components-color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.components-color-card {
+    padding: 16px;
+    border-radius: var(--radius);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+
+    &__sample {
+        height: 40px;
+        border-radius: var(--radius);
+        margin-bottom: 8px;
+
+        &--accent {
+            background: var(--accent);
+        }
+
+        &--text-primary {
+            background: var(--text-primary);
+        }
+
+        &--bg-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+        }
+
+        &--danger {
+            background: var(--danger);
+        }
+    }
+
+    &__name {
+        font-size: var(--fs-xs);
+        font-weight: 600;
+    }
+
+    &__value {
+        font-size: var(--fs-xs);
+        color: var(--text-tertiary);
+    }
+}

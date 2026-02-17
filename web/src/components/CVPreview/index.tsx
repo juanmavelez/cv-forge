@@ -1,3 +1,4 @@
+import { useRef, useLayoutEffect } from 'react';
 import type { CVData, FontStyle } from '../../types';
 import { validateAndMergeStyle } from '../../validation';
 import { defaultLabels } from '../../types';
@@ -9,6 +10,7 @@ interface CVPreviewProps {
 }
 
 export function CVPreview({ data }: CVPreviewProps) {
+    const pageRef = useRef<HTMLDivElement>(null);
     const p = data.personal;
     const fullName = [p.firstName, p.lastName].filter(Boolean).join(' ');
     const s = validateAndMergeStyle(data.style);
@@ -27,6 +29,14 @@ export function CVPreview({ data }: CVPreviewProps) {
         },
         {} as React.CSSProperties
     );
+
+    useLayoutEffect(() => {
+        if (!pageRef.current) return;
+        const el = pageRef.current;
+        Object.entries(cvVars).forEach(([key, value]) => {
+            el.style.setProperty(key, value as string);
+        });
+    }, [cvVars]);
 
     const contactItems = [
         p.email && { icon: '✉', text: p.email, href: `mailto:${p.email}` },
@@ -55,7 +65,7 @@ export function CVPreview({ data }: CVPreviewProps) {
 
     return (
         <div className="cv-preview">
-            <div className="cv-preview__page" style={cvVars}>
+            <div className="cv-preview__page" ref={pageRef}>
                 {/* Header */}
                 <header className="cv-preview__header">
                     {fullName && (
