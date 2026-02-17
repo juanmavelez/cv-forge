@@ -2,7 +2,7 @@
 .section-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     margin-bottom: 16px;
     transition: border-color var(--transition), box-shadow var(--transition);
     overflow: hidden;
@@ -43,7 +43,7 @@
     transition: transform var(--transition);
     color: var(--text-tertiary);
     font-size: var(--fs-xs);
-    /* Was 0.8rem - 12.8px -> 12px */
+
 }
 
 .section-card__body {

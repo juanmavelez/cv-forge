@@ -12,11 +12,11 @@
 .toast {
     background: var(--bg-secondary);
     border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius);
     padding: 12px 20px;
     box-shadow: var(--shadow-lg);
     font-size: var(--fs-sm);
-    /* Was 0.875rem - 14px -> 14px */
+
     display: flex;
     align-items: center;
     gap: 10px;
