@@ -161,7 +161,7 @@ export function ApplicationForm({ initialData, onSubmit, onCancel, cvs }: Applic
                 />
             </div>
 
-            <div className="modal__actions">
+            <div className="form-actions">
                 <button type="button" className="btn btn--secondary" onClick={onCancel} disabled={loading}>
                     Cancel
                 </button>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../api';
 import { applicationsApi } from '../../api/applications';
 import { Application } from '../../types';
 import { useToast } from '../../components/Toast';

@@ -1,4 +1,5 @@
 import { Application, ApplicationStatus } from '../../../types';
+import { getStatusColor } from '../utils';
 
 interface ApplicationListProps {
     applications: Application[];
@@ -18,14 +19,7 @@ export function ApplicationList({ applications, onEdit, onDelete }: ApplicationL
     }
 
     const getStatusBadge = (status: ApplicationStatus) => {
-        // Note: Using inline styles for now as we don't have utility classes for colors yet
-        const styleMap = {
-            [ApplicationStatus.Applied]: { background: '#e0f2fe', color: '#0369a1' },
-            [ApplicationStatus.Interviewing]: { background: '#fef3c7', color: '#92400e' },
-            [ApplicationStatus.Offer]: { background: '#dcfce7', color: '#166534' },
-            [ApplicationStatus.Rejected]: { background: '#fee2e2', color: '#991b1b' },
-        };
-        const s = styleMap[status];
+        const s = getStatusColor(status);
 
         return (
             <span style={{
