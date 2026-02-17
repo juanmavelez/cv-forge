@@ -20,8 +20,7 @@ export function ExperienceEntry({ index, entry, onChange, onRemove }: {
             <div className="form-row--3">
                 <FormInput label="Start Date" value={entry.startDate} type="month" onChange={v => up({ startDate: v })} />
                 <FormInput label="End Date" value={entry.endDate} type="month" onChange={v => up({ endDate: v })} />
-                <div className="form-group">
-                    <label>&nbsp;</label>
+                <div className="form-group form-group--align-end">
                     <label className="form-checkbox">
                         <input type="checkbox" checked={entry.current} onChange={e => up({ current: e.target.checked })} />
                         Current

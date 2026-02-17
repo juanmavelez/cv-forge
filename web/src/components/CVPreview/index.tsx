@@ -32,7 +32,7 @@ export function CVPreview({ data }: CVPreviewProps) {
         p.email && { icon: '✉', text: p.email, href: `mailto:${p.email}` },
         p.phone && { icon: '☎', text: p.phone, href: `tel:${p.phone}` },
         p.location && { icon: '📍', text: p.location },
-        p.linkedin && { icon: '🔗', text: 'LinkedIn', href: p.linkedin.startsWith('http') ? p.linkedin : `https://${p.linkedin}` },
+        p.linkedin && { icon: '🔗', text: p.linkedin, href: p.linkedin.startsWith('http') ? p.linkedin : `https://${p.linkedin}` },
         p.website && { icon: '🌐', text: p.website, href: p.website.startsWith('http') ? p.website : `https://${p.website}` },
     ].filter(Boolean) as { icon: string; text: string; href?: string }[];
 
