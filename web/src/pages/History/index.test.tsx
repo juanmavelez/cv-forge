@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { History } from './History';
-import { api } from '../api';
+import { History } from '.';
+import { api } from '../../api';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { ToastProvider } from '../components/Toast';
-import { ModalProvider } from '../components/Modal';
+import { ToastProvider } from '../../components/Toast';
+import { ModalProvider } from '../../components/Modal';
 
 // Mock API
-vi.mock('../api', () => ({
+vi.mock('../../api', () => ({
     api: {
         getCV: vi.fn(),
         listVersions: vi.fn(),

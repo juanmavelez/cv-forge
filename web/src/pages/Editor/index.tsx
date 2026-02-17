@@ -3,7 +3,7 @@ import { useReactToPrint } from 'react-to-print';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 import { useToast } from '../../components/Toast/index';
-import { useModal } from '../../components/Modal/index';
+// import { useModal } from '../../components/Modal/index';
 import { CVPreview } from '../../components/CVPreview/index';
 import { CVSettings } from '../../components/CVSettings/index';
 import { SectionCard } from '../../components/SectionCard/index';
@@ -14,14 +14,12 @@ import { generateDOCX } from '../../utils/docx';
 import { PrintLayout } from '../../components/PrintLayout';
 import type { CVData, Experience, Education, SkillGroup, Language, Certification } from '../../types';
 
-// Debounce timer ref
-let saveTimer: ReturnType<typeof setTimeout> | null = null;
-
+// Editor component
 export function Editor() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const toast = useToast();
-    const { prompt } = useModal();
+    const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const printRef = useRef<HTMLDivElement>(null);
 
     const [title, setTitle] = useState('');
@@ -51,8 +49,8 @@ export function Editor() {
 
     const scheduleAutoSave = (newTitle: string, newData: CVData) => {
         if (!id) return;
-        if (saveTimer) clearTimeout(saveTimer);
-        saveTimer = setTimeout(async () => {
+        if (saveTimer.current) clearTimeout(saveTimer.current);
+        saveTimer.current = setTimeout(async () => {
             setSaving(true);
             try {
                 await api.updateCV(id, newTitle, newData);

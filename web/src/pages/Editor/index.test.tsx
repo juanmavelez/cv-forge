@@ -4,7 +4,6 @@ import { Editor } from './index';
 import { api } from '../../api';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { ToastProvider } from '../../components/Toast';
-import { ModalProvider } from '../../components/Modal';
 import { emptyCVData } from '../../types';
 
 // Mock API
@@ -38,11 +37,9 @@ describe('Feature: Editor', () => {
         render(
             <MemoryRouter initialEntries={['/cv/123']}>
                 <Routes>
-                    <Route path="/cv/:id" element={
+                    <Route path='/cv/:id' element={
                         <ToastProvider>
-                            <ModalProvider>
                                 <Editor />
-                            </ModalProvider>
                         </ToastProvider>
                     } />
                 </Routes>
