@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: cv-forge-backend
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+    ports:
+      # Exposing for debugging, though in prod valid to hide it
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: cv-forge-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"

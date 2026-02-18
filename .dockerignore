@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+web/node_modules
+web/dist
+
+# Go
+cv-forge
+dist
+
+# Docker
+docker-compose.yml
+Dockerfile*
+
+# Env
+.env

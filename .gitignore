@@ -24,3 +24,6 @@ Thumbs.db
 
 # Secrets
 .env
+
+# Local Data
+data/
