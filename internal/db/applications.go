@@ -9,13 +9,14 @@ import (
 )
 
 // ListApplications listing for dashboard.
-func (db *DB) ListApplications() ([]models.Application, error) {
+func (db *DB) ListApplications(userID string) ([]models.Application, error) {
 	query := `
 		SELECT id, company, role, status, salary, url, date, notes, cv_id, cv_version_id, created_at, updated_at
 		FROM applications
+		WHERE user_id = ? OR user_id IS NULL
 		ORDER BY date DESC
 	`
-	rows, err := db.conn.Query(query)
+	rows, err := db.conn.Query(query, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -36,13 +37,13 @@ func (db *DB) ListApplications() ([]models.Application, error) {
 }
 
 // GetApplication by ID.
-func (db *DB) GetApplication(id string) (*models.Application, error) {
+func (db *DB) GetApplication(id, userID string) (*models.Application, error) {
 	query := `
 		SELECT id, company, role, status, salary, url, date, notes, cv_id, cv_version_id, created_at, updated_at
 		FROM applications
-		WHERE id = ?
+		WHERE id = ? AND (user_id = ? OR user_id IS NULL)
 	`
-	row := db.conn.QueryRow(query, id)
+	row := db.conn.QueryRow(query, id, userID)
 	app, err := scanApplicationRow(row)
 	if err == sql.ErrNoRows {
 		return nil, nil
@@ -54,18 +55,14 @@ func (db *DB) GetApplication(id string) (*models.Application, error) {
 }
 
 // CreateApplication creates a new tracker entry.
-func (db *DB) CreateApplication(req models.CreateApplicationRequest) (*models.Application, error) {
+func (db *DB) CreateApplication(userID string, req models.CreateApplicationRequest) (*models.Application, error) {
 	id := uuid.New().String()
 	now := time.Now().UTC()
 
-	// Handle cv_id and cv_version_id which can be null (pointer in struct, but string in DB Exec)
-	// Actually, sql.NullString is safer, or just pass the pointer directly if driver supports it?
-	// modernc.org/sqlite supports passing *string as nil.
-
 	_, err := db.conn.Exec(
-		`INSERT INTO applications (id, company, role, status, salary, url, date, notes, cv_id, cv_version_id, created_at, updated_at) 
-		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		id, req.Company, req.Role, req.Status, req.Salary, req.URL, req.Date, req.Notes, req.CVID, req.CVVersionID, now, now,
+		`INSERT INTO applications (id, user_id, company, role, status, salary, url, date, notes, cv_id, cv_version_id, created_at, updated_at) 
+		 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		id, userID, req.Company, req.Role, req.Status, req.Salary, req.URL, req.Date, req.Notes, req.CVID, req.CVVersionID, now, now,
 	)
 	if err != nil {
 		return nil, err
@@ -88,13 +85,13 @@ func (db *DB) CreateApplication(req models.CreateApplicationRequest) (*models.Ap
 }
 
 // UpdateApplication updates an existing entry.
-func (db *DB) UpdateApplication(id string, req models.UpdateApplicationRequest) (*models.Application, error) {
+func (db *DB) UpdateApplication(id, userID string, req models.UpdateApplicationRequest) (*models.Application, error) {
 	now := time.Now().UTC()
 	res, err := db.conn.Exec(
 		`UPDATE applications 
-		 SET company=?, role=?, status=?, salary=?, url=?, date=?, notes=?, cv_id=?, cv_version_id=?, updated_at=?
-		 WHERE id=?`,
-		req.Company, req.Role, req.Status, req.Salary, req.URL, req.Date, req.Notes, req.CVID, req.CVVersionID, now, id,
+		 SET company=?, role=?, status=?, salary=?, url=?, date=?, notes=?, cv_id=?, cv_version_id=?, updated_at=?, user_id=?
+		 WHERE id=? AND (user_id=? OR user_id IS NULL)`,
+		req.Company, req.Role, req.Status, req.Salary, req.URL, req.Date, req.Notes, req.CVID, req.CVVersionID, now, userID, id, userID,
 	)
 	if err != nil {
 		return nil, err
@@ -103,12 +100,12 @@ func (db *DB) UpdateApplication(id string, req models.UpdateApplicationRequest) 
 	if n == 0 {
 		return nil, nil
 	}
-	return db.GetApplication(id)
+	return db.GetApplication(id, userID)
 }
 
 // DeleteApplication removes an entry.
-func (db *DB) DeleteApplication(id string) (bool, error) {
-	res, err := db.conn.Exec(`DELETE FROM applications WHERE id = ?`, id)
+func (db *DB) DeleteApplication(id, userID string) (bool, error) {
+	res, err := db.conn.Exec(`DELETE FROM applications WHERE id = ? AND (user_id = ? OR user_id IS NULL)`, id, userID)
 	if err != nil {
 		return false, err
 	}

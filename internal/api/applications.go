@@ -9,7 +9,13 @@ import (
 )
 
 func (h *handler) listApplications(w http.ResponseWriter, r *http.Request) {
-	apps, err := h.db.ListApplications()
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	apps, err := h.db.ListApplications(userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to list applications")
 		return
@@ -18,8 +24,14 @@ func (h *handler) listApplications(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) getApplication(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
-	app, err := h.db.GetApplication(id)
+	app, err := h.db.GetApplication(id, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get application")
 		return
@@ -32,6 +44,12 @@ func (h *handler) getApplication(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) createApplication(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	var req models.CreateApplicationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request body")
@@ -44,7 +62,7 @@ func (h *handler) createApplication(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app, err := h.db.CreateApplication(req)
+	app, err := h.db.CreateApplication(userID, req)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create application")
 		return
@@ -53,6 +71,12 @@ func (h *handler) createApplication(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) updateApplication(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
 	var req models.UpdateApplicationRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -60,7 +84,7 @@ func (h *handler) updateApplication(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app, err := h.db.UpdateApplication(id, req)
+	app, err := h.db.UpdateApplication(id, userID, req)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to update application")
 		return
@@ -73,8 +97,14 @@ func (h *handler) updateApplication(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) deleteApplication(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
-	ok, err := h.db.DeleteApplication(id)
+	ok, err := h.db.DeleteApplication(id, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to delete application")
 		return

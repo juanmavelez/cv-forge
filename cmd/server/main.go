@@ -12,15 +12,22 @@ import (
 
 	"github.com/cv-forge/cv-forge/internal/api"
 	"github.com/cv-forge/cv-forge/internal/db"
+	"github.com/joho/godotenv"
 )
 
 //go:embed all:dist
 var distFS embed.FS
 
 func main() {
+	// Load .env file if it exists
+	_ = godotenv.Load()
+
 	port := flag.Int("port", 8080, "port to listen on")
 	dbPath := flag.String("db", "", "path to SQLite database file (default: ~/.cv-forge/data.db)")
 	flag.Parse()
+
+	// Initialize Auth
+	api.InitAuth()
 
 	// Determine database path
 	if *dbPath == "" {

@@ -21,3 +21,6 @@ web/coverage/
 .DS_Store
 Thumbs.db
 *.pdf
+
+# Secrets
+.env

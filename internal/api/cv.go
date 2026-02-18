@@ -16,7 +16,13 @@ type handler struct {
 // --- CV CRUD ---
 
 func (h *handler) listCVs(w http.ResponseWriter, r *http.Request) {
-	cvs, err := h.db.ListCVs()
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	cvs, err := h.db.ListCVs(userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to list CVs")
 		return
@@ -25,8 +31,14 @@ func (h *handler) listCVs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) getCV(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
-	cv, err := h.db.GetCV(id)
+	cv, err := h.db.GetCV(id, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get CV")
 		return
@@ -39,6 +51,12 @@ func (h *handler) getCV(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) createCV(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	var req models.CreateCVRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request body")
@@ -47,7 +65,7 @@ func (h *handler) createCV(w http.ResponseWriter, r *http.Request) {
 	if req.Title == "" {
 		req.Title = "Untitled CV"
 	}
-	cv, err := h.db.CreateCV(req.Title, req.Data)
+	cv, err := h.db.CreateCV(userID, req.Title, req.Data)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create CV")
 		return
@@ -56,14 +74,24 @@ func (h *handler) createCV(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) updateCV(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
 	var req models.UpdateCVRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
-	cv, err := h.db.UpdateCV(id, req.Title, req.Data)
+	cv, err := h.db.UpdateCV(id, userID, req.Title, req.Data)
 	if err != nil {
+		if err.Error() == "unauthorized" {
+			writeError(w, http.StatusForbidden, "unauthorized")
+			return
+		}
 		writeError(w, http.StatusInternalServerError, "failed to update CV")
 		return
 	}
@@ -75,8 +103,14 @@ func (h *handler) updateCV(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) deleteCV(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
-	ok, err := h.db.DeleteCV(id)
+	ok, err := h.db.DeleteCV(id, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to delete CV")
 		return

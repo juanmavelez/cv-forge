@@ -6,9 +6,11 @@ A self-hosted CV builder. Create, manage, and export professional CVs from a cle
 
 - **Structured CV editing** — Fill in sections like LinkedIn (Personal info, Summary, Experience, Education, Skills, Languages, Certifications)
 - **Multiple CVs** — Create and manage several CVs
+- **Job Application Tracking** — Track applications (Applied, Interviewing, Offer, Rejected) with notes and salary
 - **Version control** — Git-style snapshots with history and restore
 - **Export** — PDF (clean one-column) and DOCX (editable in Google Docs/Word)
 - **JSON backup** — Import/export your data
+- **Google SSO** — Secure login with Google Authentication
 - **Dark mode** — Light/dark theme with system preference detection
 - **Self-hosted** — Your data stays on your machine
 
@@ -27,6 +29,25 @@ make build
 ```
 
 Open [http://localhost:8080](http://localhost:8080) in your browser.
+
+## Configuration
+
+The application requires Google SSO credentials for authentication.
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` and set your credentials:
+   ```bash
+   GOOGLE_CLIENT_ID="your-client-id"
+   GOOGLE_CLIENT_SECRET="your-client-secret"
+   # Optional
+   GOOGLE_REDIRECT_URL="http://localhost:8080/api/auth/google/callback"
+   SESSION_SECRET="your-session-secret"
+   ```
+
 
 ## Requirements
 
@@ -56,9 +77,9 @@ make clean
 ## Tech Stack
 
 - **Backend:** Go, Chi router, SQLite (pure Go driver)
-- **Frontend:** TypeScript, vanilla CSS
+- **Frontend:** React, Vite, TypeScript
 - **Export:** go-pdf/fpdf (PDF), Open XML (DOCX)
-- **Build:** esbuild, Make
+- **Build:** Vite, Make
 
 ## License
 

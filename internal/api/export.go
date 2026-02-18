@@ -13,8 +13,14 @@ import (
 // --- Export handlers ---
 
 func (h *handler) exportJSON(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	id := chi.URLParam(r, "id")
-	cv, err := h.db.GetCV(id)
+	cv, err := h.db.GetCV(id, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get CV")
 		return
@@ -45,6 +51,12 @@ func (h *handler) exportJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) importCV(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	var cvExport models.CVExport
 	if err := json.NewDecoder(r.Body).Decode(&cvExport); err != nil {
 		writeError(w, http.StatusBadRequest, "invalid JSON format")
@@ -55,7 +67,7 @@ func (h *handler) importCV(w http.ResponseWriter, r *http.Request) {
 		cvExport.Title = "Imported CV"
 	}
 
-	cv, err := h.db.CreateCV(cvExport.Title, cvExport.Data)
+	cv, err := h.db.CreateCV(userID, cvExport.Title, cvExport.Data)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to import CV")
 		return
@@ -63,6 +75,10 @@ func (h *handler) importCV(w http.ResponseWriter, r *http.Request) {
 
 	// Re-import versions if present
 	for _, v := range cvExport.Versions {
+		// Verify ownership check might be implicitly handled if CreateCV succeeded
+		// But CreateVersionFromData doesn't take userID, it trusts caller?
+		// db.CreateVersionFromData(cvID, message, data).
+		// Since we just created cv and got cv.ID, we are owner.
 		_, err := h.db.CreateVersionFromData(cv.ID, v.Message, v.Data)
 		if err != nil {
 			// Log but continue

@@ -11,10 +11,16 @@ import (
 // --- Version handlers ---
 
 func (h *handler) listVersions(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	cvID := chi.URLParam(r, "id")
 
-	// Check CV exists
-	cv, err := h.db.GetCV(cvID)
+	// Check CV exists and belongs to user
+	cv, err := h.db.GetCV(cvID, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get CV")
 		return
@@ -33,9 +39,25 @@ func (h *handler) listVersions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) getVersion(w http.ResponseWriter, r *http.Request) {
-	cvID := chi.URLParam(r, "id")
-	versionID := chi.URLParam(r, "vid")
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
 
+	cvID := chi.URLParam(r, "id")
+	// Verify ownership
+	cv, err := h.db.GetCV(cvID, userID)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "failed to get CV")
+		return
+	}
+	if cv == nil {
+		writeError(w, http.StatusNotFound, "CV not found")
+		return
+	}
+
+	versionID := chi.URLParam(r, "vid")
 	version, err := h.db.GetVersion(cvID, versionID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to get version")
@@ -49,6 +71,12 @@ func (h *handler) getVersion(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) createVersion(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	cvID := chi.URLParam(r, "id")
 
 	var req models.CreateVersionRequest
@@ -60,7 +88,9 @@ func (h *handler) createVersion(w http.ResponseWriter, r *http.Request) {
 		req.Message = "Snapshot"
 	}
 
-	version, err := h.db.CreateVersion(cvID, req.Message)
+	// Create version snapshot
+
+	version, err := h.db.CreateVersion(cvID, userID, req.Message)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to create version")
 		return
@@ -73,10 +103,18 @@ func (h *handler) createVersion(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) restoreVersion(w http.ResponseWriter, r *http.Request) {
+	userID, ok := GetUserID(r.Context())
+	if !ok {
+		writeError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
 	cvID := chi.URLParam(r, "id")
 	versionID := chi.URLParam(r, "vid")
 
-	cv, err := h.db.RestoreVersion(cvID, versionID)
+	// Restore version
+
+	cv, err := h.db.RestoreVersion(cvID, versionID, userID)
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, "failed to restore version")
 		return

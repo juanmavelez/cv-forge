@@ -24,35 +24,51 @@ func NewRouter(database *db.DB, staticFS http.FileSystem) *chi.Mux {
 	r.Route("/api", func(r chi.Router) {
 		r.Use(jsonMiddleware)
 
-		// CV CRUD
-		r.Get("/cvs", h.listCVs)
-		r.Post("/cvs", h.createCV)
-		r.Post("/cvs/import", h.importCV)
+		// Auth routes (public)
+		r.Route("/auth", func(r chi.Router) {
+			r.Get("/google/login", h.HandleGoogleLogin)
+			r.Get("/google/callback", h.HandleGoogleCallback)
+			r.Post("/logout", h.HandleLogout)
 
-		r.Route("/cvs/{id}", func(r chi.Router) {
-			r.Get("/", h.getCV)
-			r.Put("/", h.updateCV)
-			r.Delete("/", h.deleteCV)
-
-			// Export
-			// Export
-			r.Get("/export/json", h.exportJSON)
-
-			// Versions
-			r.Get("/versions", h.listVersions)
-			r.Post("/versions", h.createVersion)
-			r.Get("/versions/{vid}", h.getVersion)
-			r.Post("/versions/{vid}/restore", h.restoreVersion)
-			r.Post("/versions/{vid}/restore", h.restoreVersion)
+			// Protected Auth routes
+			r.Group(func(r chi.Router) {
+				r.Use(AuthMiddleware)
+				r.Get("/me", h.GetMe)
+			})
 		})
 
-		// Job Applications
-		r.Get("/applications", h.listApplications)
-		r.Post("/applications", h.createApplication)
-		r.Route("/applications/{id}", func(r chi.Router) {
-			r.Get("/", h.getApplication)
-			r.Put("/", h.updateApplication)
-			r.Delete("/", h.deleteApplication)
+		// Protected API routes
+		r.Group(func(r chi.Router) {
+			r.Use(AuthMiddleware)
+
+			// CV CRUD
+			r.Get("/cvs", h.listCVs)
+			r.Post("/cvs", h.createCV)
+			r.Post("/cvs/import", h.importCV)
+
+			r.Route("/cvs/{id}", func(r chi.Router) {
+				r.Get("/", h.getCV)
+				r.Put("/", h.updateCV)
+				r.Delete("/", h.deleteCV)
+
+				// Export
+				r.Get("/export/json", h.exportJSON)
+
+				// Versions
+				r.Get("/versions", h.listVersions)
+				r.Post("/versions", h.createVersion)
+				r.Get("/versions/{vid}", h.getVersion)
+				r.Post("/versions/{vid}/restore", h.restoreVersion)
+			})
+
+			// Job Applications
+			r.Get("/applications", h.listApplications)
+			r.Post("/applications", h.createApplication)
+			r.Route("/applications/{id}", func(r chi.Router) {
+				r.Get("/", h.getApplication)
+				r.Put("/", h.updateApplication)
+				r.Delete("/", h.deleteApplication)
+			})
 		})
 	})
 
