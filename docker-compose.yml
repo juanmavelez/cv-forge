@@ -10,6 +10,8 @@ services:
     ports:
       # Exposing for debugging, though in prod valid to hide it
       - "8080:8080"
+    networks:
+      - internal-network
 
   frontend:
     build:
@@ -21,3 +23,11 @@ services:
       - backend
     ports:
       - "3000:80"
+    networks:
+      - velez-network
+      - internal-network
+
+networks:
+  velez-network:
+    external: true
+  internal-network:
