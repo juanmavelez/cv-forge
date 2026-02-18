@@ -201,7 +201,7 @@ func (db *DB) CreateOrUpdateUser(email, name, picture string) (*models.User, err
 
 // ListCVs returns all CVs for a user.
 func (db *DB) ListCVs(userID string) ([]models.CV, error) {
-	rows, err := db.conn.Query(`SELECT id, title, data, created_at, updated_at FROM cvs WHERE user_id = ? OR user_id IS NULL ORDER BY updated_at DESC`, userID)
+	rows, err := db.conn.Query(`SELECT id, title, data, created_at, updated_at FROM cvs WHERE user_id = ? ORDER BY updated_at DESC`, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +223,7 @@ func (db *DB) ListCVs(userID string) ([]models.CV, error) {
 
 // GetCV returns a single CV by ID, ensuring it belongs to the user (or is legacy global).
 func (db *DB) GetCV(id, userID string) (*models.CV, error) {
-	row := db.conn.QueryRow(`SELECT id, title, data, created_at, updated_at FROM cvs WHERE id = ? AND (user_id = ? OR user_id IS NULL)`, id, userID)
+	row := db.conn.QueryRow(`SELECT id, title, data, created_at, updated_at FROM cvs WHERE id = ? AND user_id = ?`, id, userID)
 	cv, err := scanCVRow(row)
 	if err == sql.ErrNoRows {
 		return nil, nil
@@ -265,26 +265,10 @@ func (db *DB) UpdateCV(id, userID, title string, data models.CVData) (*models.CV
 		return nil, err
 	}
 	now := time.Now().UTC()
-	// Allow updating if user_id matches OR if user_id is NULL (legacy), assume taking ownership?
-	// For now, simple check. If it was NULL, we might want to assign it to this user?
-	// Let's keep it simple: strict check usually, but for migration support,
-	// maybe we claim keys if they are null?
-	// Let's claim ownership if it's currently NULL.
-
-	// First check current owner
-	var currentOwner *string
-	err = db.conn.QueryRow(`SELECT user_id FROM cvs WHERE id = ?`, id).Scan(&currentOwner)
-	if err != nil {
-		return nil, err
-	}
-
-	if currentOwner != nil && *currentOwner != userID {
-		return nil, fmt.Errorf("unauthorized")
-	}
-
+	// Strict check: only update if user_id matches
 	res, err := db.conn.Exec(
-		`UPDATE cvs SET title = ?, data = ?, updated_at = ?, user_id = ? WHERE id = ?`,
-		title, string(dataJSON), now, userID, id,
+		`UPDATE cvs SET title = ?, data = ?, updated_at = ? WHERE id = ? AND user_id = ?`,
+		title, string(dataJSON), now, id, userID,
 	)
 	if err != nil {
 		return nil, err
@@ -298,7 +282,7 @@ func (db *DB) UpdateCV(id, userID, title string, data models.CVData) (*models.CV
 
 // DeleteCV deletes a CV by ID.
 func (db *DB) DeleteCV(id, userID string) (bool, error) {
-	res, err := db.conn.Exec(`DELETE FROM cvs WHERE id = ? AND (user_id = ? OR user_id IS NULL)`, id, userID)
+	res, err := db.conn.Exec(`DELETE FROM cvs WHERE id = ? AND user_id = ?`, id, userID)
 	if err != nil {
 		return false, err
 	}
