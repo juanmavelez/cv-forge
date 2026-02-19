@@ -2,6 +2,21 @@
 
 A self-hosted CV builder. Create, manage, and export professional CVs from a clean web interface.
 
+## Deployment (Automatic Updates)
+
+This repository uses a **pull-based** deployment strategy. The server checks for updates periodically.
+
+1.  **Make script executable**:
+    ```bash
+    chmod +x ~/cv-forge/scripts/auto-deploy.sh
+    ```
+
+2.  **Add Cron Job** (`crontab -e`):
+    ```bash
+    # Check for updates every 5 minutes
+    */5 * * * * ~/cv-forge/scripts/auto-deploy.sh >> ~/deploy-cvforge.log 2>&1
+    ```
+
 ## Features
 
 - **Structured CV editing** — Fill in sections like LinkedIn (Personal info, Summary, Experience, Education, Skills, Languages, Certifications)
