@@ -2,13 +2,13 @@
 
 # Build everything
 build: deps frontend backend
-	@echo "✅ Build complete! Run ./cv-forge to start."
+	@echo "Build complete! Run ./cv-forge to start."
 
 # Install dependencies
 deps:
-	@echo "📦 Installing frontend dependencies..."
+	@echo "Installing frontend dependencies..."
 	cd web && npm install --silent
-	@echo "📦 Installing Go dependencies..."
+	@echo "Installing Go dependencies..."
 	go mod tidy
 
 # Build frontend (React + Vite → dist/)
@@ -23,35 +23,42 @@ backend:
 
 # Development mode
 dev: deps
-	@echo "🚀 Starting Go backend and Vite dev server..."
+	@echo "Starting Go backend and Vite dev server..."
 	(go run ./cmd/server & cd web && npm run dev)
 
 # Clean build artifacts
 clean:
 	rm -rf cv-forge cmd/server/dist web/node_modules web/dist
-	@echo "🧹 Cleaned."
+	@echo "Cleaned."
 
 # Linting
 lint: lint-frontend lint-backend
-	@echo "✅ Linting complete!"
+	@echo "Linting complete!"
 
 lint-frontend:
-	@echo "🔍 Linting frontend..."
+	@echo "Linting frontend..."
 	cd web && npm run lint
 
 lint-backend:
-	@echo "🔍 Linting backend..."
+	@echo "Linting backend..."
 	go fmt ./...
 	go vet ./...
 
 # Testing
 test: test-frontend test-backend
-	@echo "✅ All tests complete!"
+	@echo "All tests complete!"
 
 test-frontend:
-	@echo "🧪 Running frontend tests..."
+	@echo "Running frontend tests..."
 	cd web && npm run test
 
 test-backend:
-	@echo "🧪 Running backend tests..."
+	@echo "Running backend tests..."
 	go test ./...
+
+# Deploy using Docker Compose (Production)
+deploy:
+	@echo "Deploying CV Forge..."
+	@docker-compose up -d --build
+	@docker image prune -f
+	@echo "Deployed!"

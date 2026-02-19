@@ -5,7 +5,7 @@ import path from 'path';
 
 export default defineConfig({
     plugins: [react()],
-    base: '/cv-forge/',
+    base: '/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),
