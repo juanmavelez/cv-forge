@@ -1,6 +1,7 @@
 # Build artifacts
 cmd/server/dist/
 cv-forge
+web/dist/
 
 # Go
 *.exe
