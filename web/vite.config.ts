@@ -12,7 +12,7 @@ export default defineConfig({
         },
     },
     build: {
-        outDir: '../cmd/server/dist',
+        outDir: 'dist',
         emptyOutDir: true,
     },
     server: {

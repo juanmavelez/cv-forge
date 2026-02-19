@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./data:/app/data
+    env_file:
+      - .env
     ports:
       # Exposing for debugging, though in prod valid to hide it
       - "8080:8080"
